@@ -64,6 +64,20 @@ JWT token auth
 - /compact로 기억 압축
 - /stats로 사용량 모니터링
 
+6. 작업 단위 최적화
+- 한번에 큰 작업을 요청하기 보다 작은 단위로 쪼개서 요청
+
+7. 커스텀 명령어 활용
+- 슬래시 명령어 만들기: .claude/commands/fix.md
+- /fix 로 사용
+예시
+--------------
+Analyze the error and fix the bug
+- identify root cause
+- implement solution
+- add error handling
+- 수정 내용 한글로 설명
+---------------
 
 -------참고링크------
 https://twofootdog.tistory.com/422#toc1
