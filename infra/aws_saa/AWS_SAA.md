@@ -105,3 +105,29 @@
 -AWS Cloud Watch: Dashboard Share으로 AWS계정없는 사람도 접근가능
 
 
+### Amazon Elastic Block Store (Amazon EBS) 
+
+### AWS S3
+데이터 저장용 서비스
+- S3 Transfer Acceleration: From GLOBAL sites as quickly as possible in a SINGLE S3 bucket. Minimize operational complexity
+- VPC외부에 있는 글로벌 퍼블릭 서비스
+- EC2에서 S3에 접근 시 보통 인터넷 없이 접근. S3는 Gateway Endpoint 많이 사용함
+
+
+
+### Amazon Athena
+Amazon Athena is an interactive query service that makes it easy to analyze data directly in Amazon Simple Storage Service (Amazon S3) using standard SQL.
+
+### IAM
+- PrincipalOrgID: Organization을 위한 접근 정책
+
+### VPC Endpoint
+ <키워드>
+- Private access to S3
+- No internet access
+- Access S3 from VPC
+- Secure connection
+
+### 그 외 지식
+- multipart upload란?
+Multipart Upload는 큰 파일을 여러 개의 작은 파트로 나누어 병렬로 업로드한 후 Amazon S3에서 하나의 객체로 합치는 업로드 방식이다. 대용량 데이터를 빠르고 안정적으로 업로드하기 위해 사용.
