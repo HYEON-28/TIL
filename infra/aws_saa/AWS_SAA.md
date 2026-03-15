@@ -36,15 +36,23 @@
 
 - Outbound 접근을 URL기반으로 필터링
 
-- AWS Network Firewall
-	- L3~L7 트래픽 검사
-	- 아웃바운드 트래픽 제어 기능
-	- 도메인 기반 허용/차단
+### AWS Network Firewall
+- L3~L7 트래픽 검사
+- 아웃바운드 트래픽 제어 기능
+- 도메인 기반 허용/차단
+- VPC내부의 트래픽을 검사(Inspection)하고 필터링(filtering)
 
-- AWS WAF(Web Applicaiton Firewall)
-	- 인바운드 트래픽용
-	- 악성트래픽으로부터 웹 어플리케이션 보호
-	- HTTP/HTTPS 트래픽 검사, SQL 인젝션, 크로스 사이트 스크립팅(XSS)등 공격 방어
+### AWS Firewall Manager
+- 방화벽 정책 관리자
+- AWS Network Firewall은 실제 방화벽
+
+### AWS WAF(Web Applicaiton Firewall)
+- 인바운드 트래픽용
+- 악성트래픽으로부터 웹 어플리케이션 보호
+- HTTP/HTTPS 트래픽 검사, SQL 인젝션, 크로스 사이트 스크립팅(XSS)등 공격 방어
+
+### Amazon GuardDuty
+- AWS 계정과 리소스에서 발생하는 로그를 분석해 보안 위협을 자동으로 탐지, 보안경고 생성
 
 - 보안그룹
 	- 인스턴스 단위, IP/Port 기반
@@ -68,9 +76,7 @@
 - snowmobile
 	-수백 TB~PB
 
--NFS(Network File System)
-	-네트워크를 통해 파일 시스템을 공유하는 표준 프로토콜
-	-다른 서버에 있는 디스크를 내 서버의 폴더처럼 쓰게 해주는 방식
+
 
 -Amazon FSx for Windows File Server
 	-완전한 Windows 네이티브 파일 시스템
@@ -84,6 +90,13 @@
 	-빠른 비용 분석 & 그래프 -> Cost Explorer
 	-예산 초과 알림 -> AWS Budgets
 	-아주 상세한 원시 데이터 분석 -> CUR + Athena / QuickSight
+
+### Amazon QuickSight
+- 여러 데이터 소스의 데이터를 연결하여 대시보드와 데이터 시각화를 생성하고 조직 내 사용자에게 공유할 수 있는 분석 플랫폼
+- IAM role 기반 공유X
+- QuickSight user/group 기반 공유
+- 연결가능 데이터소스: S3, RDS, Redshift, Athena, PostgreSQL, MySQL, EXCEL, CSV...
+
 
 -예약 인스턴스(Reserved Instance)
 -1,3년단위 예약가능
@@ -106,6 +119,17 @@
 
 
 ### Amazon Elastic Block Store (Amazon EBS) 
+- EBS = EC2 전용(EC2에서만 쓰는) 가상 하드디스크
+- 스냅샷 기능 -> S3에 저장가능
+- 키워드
+	- EC2 디스크
+	- Low Latency storage
+	- block storage
+	- OS disk
+
+### Amazon Elastic File System (Amazon EFS)
+- 여러 EC2 가 동시에 mount 가능
+- 
 
 ### AWS S3
 데이터 저장용 서비스
@@ -113,7 +137,15 @@
 - VPC외부에 있는 글로벌 퍼블릭 서비스
 - EC2에서 S3에 접근 시 보통 인터넷 없이 접근. S3는 Gateway Endpoint 많이 사용함
 
+### S3 File Gateway
+- 온프레미스 파일 서버(SMB/NFS)를 Amazon S3와 연결하여 S3를 사실상 무제한 파일 스토리지처럼 사용하게 해주는 캐시 기반 게이트웨이
+- 로컬처럼 보이지만 실제 저장은 S3에 함
+- 자주쓰는 파일 -> 로컬 캐시
 
+### Clould Front
+- 정적파일 글로벌 배포: S3 + Cloud Front
+- 정적 콘텐츠: S3캐싱
+- 동적 콘텐츠: ALB/EC2 전달
 
 ### Amazon Athena
 Amazon Athena is an interactive query service that makes it easy to analyze data directly in Amazon Simple Storage Service (Amazon S3) using standard SQL.
@@ -128,6 +160,88 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 - Access S3 from VPC
 - Secure connection
 
+### 데이터 업로드
+- 10TB 이하 인터넷 업로드
+- 10TB ~ 100TB : Snowball
+- 100TB 이상: SnowMobile
+
+### Amazon Simple Notification Service(SNS)
+- 메시지를 여러 구독자에게 동시에 전달하는 AWS의 Pub/Sub(발행-구독) 메시징 서비스입니다.
+- 하나의 이벤트 → 여러 시스템에 동시에 전달(Fan-out) 하는 구조를 쉽게 구현
+
+### Amazon Simple Queue Service (SQS)
+- 플리케이션 간 메시지를 큐(Queue)에 저장하여 비동기적으로 처리하도록 하는 AWS의 완전관리형 메시지 큐 서비스
+- 사용 이유: 서비스 분리(Decoupling), 서비스끼리 직접 호출하지 않음
+- Standard Queue: 순서 보장X
+- FIFO Queue: 순서 보장O
+
+### AWS Secrets Manager
+- automatic rotation
+- DB 자격증명(username/password)을 안전하게 저장하고 자동으로 교체
+- Automatic Rotation: 실제로 데이터베이스 비밀번호를 자동으로 변경하고, 새 비밀번호를 Secrets Manager에 업데이트까지 해줌
+- Parameter Store: utomatic Rotation안됨
+- Multi-Region secret replication: 여러 리전에 복제 가능
+
+## Amazon Aurora
+- AWS가 직접 만든 DB엔진
+- Aurora Replicas: 읽기 확정
+- Auto Scaling: read Replica 자동 추가, 삭제
+- Multi-AZ: 고가용성
+- RDS: Auto Scaling안됨
+- MySQL/PostgreSQL만 지원
+
+
+### Fan-out Architecture
+- 하나의 이벤트(또는 메시지)를 여러 소비자(서비스)에게 동시에 전달하는 아키텍처 패턴
+- 1개의 입력 → N개의 처리 시스템으로 확장 전달하는 구조
+- 대표적인 구성: SNS -> SQS Fan-out
+
+Producer
+   │
+   ▼
+SNS Topic
+   │
+ ┌─┼─┬─┐
+ ▼ ▼ ▼ ▼
+SQS SQS SQS
+
+- 예시: SNS 게시글 업로드
+User Post
+   │
+   ▼
+Event Bus
+   │
+ ┌─┼──────────┬───────────┐
+ ▼ ▼          ▼           ▼
+Feed Update  Notification  Search Index  Analytics
+
+### Queue-based load leveling
+          Jobs
+           │
+           ▼
+        SQS Queue
+           │
+           ▼
+     Auto Scaling Group
+       EC2 Workers
+
+
 ### 그 외 지식
 - multipart upload란?
 Multipart Upload는 큰 파일을 여러 개의 작은 파트로 나누어 병렬로 업로드한 후 Amazon S3에서 하나의 객체로 합치는 업로드 방식이다. 대용량 데이터를 빠르고 안정적으로 업로드하기 위해 사용.
+- NFS(Network File System)란?
+	- 네트워크를 통해 파일 시스템을 공유하는 표준 프로토콜
+	- 다른 서버에 있는 디스크를 내 서버의 폴더처럼 쓰게 해주는 방식
+	- Linux/Unix에서 주로 사용
+- SMB file server란?
+	- Server Message Block
+	- 네트워크 파일 공유 프로토콜
+	- Windows에서 주로 사용
+- Read Replica란?
+	- 데이터베이스의 "읽기 전용 복제본"
+	- 쓰기는 원본 DB, 읽기는 복제DB들이 처리함
+	- 원본 DB가 변경된 경우 Replication Log로 데이터 변경함. 쿼리보다 훨씬 가벼움.
+- data lake란?
+	- 원본 형태(raw data) 그대로의 데이터를 대량으로 저장해두고 필요할 때 분석하는 데이터 저장 구조
+	- 보통 S3을 data lake로 사용함
+	- log.json, image.jpg, sensor.csv, video.mp4
