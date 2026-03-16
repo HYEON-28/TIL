@@ -26,6 +26,7 @@
 	- IP, Port만 확인함
 	- TCP, UDP, 고정IP, 초고성능 -> NLB
 - Gateway Load Balancer (L3~L4)
+	- 방화벽/보안 장비 트래픽 검사
 
 - TLS/HTTPS 암호화 = 보안통신
 	- TLS: Transport Layer Security, 네트워크에서 데이터를 암호화하여 안전하게 전송
@@ -33,8 +34,11 @@
 
 - 트래픽 암호화: TLS/HTTPS 설정이 필요한 것.
 	- "인증서"가 필요하고, 이 인증서를 ACM이 관리함.
-
+	
 - Outbound 접근을 URL기반으로 필터링
+
+### Gateway Load Balancer
+- AWS에서 방화벽/보안 장비 트래픽 검사를 구현할 때 사용
 
 ### AWS Network Firewall
 - L3~L7 트래픽 검사
@@ -126,16 +130,23 @@
 	- Low Latency storage
 	- block storage
 	- OS disk
+- EBS fast snapshot restore
 
 ### Amazon Elastic File System (Amazon EFS)
 - 여러 EC2 가 동시에 mount 가능
 - 
+
 
 ### AWS S3
 데이터 저장용 서비스
 - S3 Transfer Acceleration: From GLOBAL sites as quickly as possible in a SINGLE S3 bucket. Minimize operational complexity
 - VPC외부에 있는 글로벌 퍼블릭 서비스
 - EC2에서 S3에 접근 시 보통 인터넷 없이 접근. S3는 Gateway Endpoint 많이 사용함
+- Amazon S3 Intelligent-Tiering
+	- 자동 계층 이동(Frequent <-> Infrequent)
+	- 접근 패턴 자동 분석
+	- AZ 장애 보호
+	- 비용 최적화
 
 ### S3 File Gateway
 - 온프레미스 파일 서버(SMB/NFS)를 Amazon S3와 연결하여 S3를 사실상 무제한 파일 스토리지처럼 사용하게 해주는 캐시 기반 게이트웨이
@@ -146,12 +157,22 @@
 - 정적파일 글로벌 배포: S3 + Cloud Front
 - 정적 콘텐츠: S3캐싱
 - 동적 콘텐츠: ALB/EC2 전달
+- 초고트래픽 대응의 핵심 기술 중 하나
+	- 캐시된 파일 제공: 서버부하 없음
+	- 전 세계 수백개 서버가 트래픽 분산처리
 
 ### Amazon Athena
 Amazon Athena is an interactive query service that makes it easy to analyze data directly in Amazon Simple Storage Service (Amazon S3) using standard SQL.
 
 ### IAM
 - PrincipalOrgID: Organization을 위한 접근 정책
+- EC2가 AWS 서비스에 접근할 때는 IAM Role 사용이 정석
+	- AWS 서비스가 다른 AWS 서비스에 접근 → IAM Role
+- IAM USER사용 시에는 Access Key를 서버에 저장해야 해서 보안 취약함
+- EC2 -> S3 접근 : IAM Role
+- Lambda -> Dynamo DB : IAM Role
+- ECS -> S3 : IAM Role
+- 사용자 로그인 : IAM User
 
 ### VPC Endpoint
  <키워드>
@@ -245,3 +266,16 @@ Multipart Upload는 큰 파일을 여러 개의 작은 파트로 나누어 병�
 	- 원본 형태(raw data) 그대로의 데이터를 대량으로 저장해두고 필요할 때 분석하는 데이터 저장 구조
 	- 보통 S3을 data lake로 사용함
 	- log.json, image.jpg, sensor.csv, video.mp4
+- three-tier web application란?
+	- 웹 애플리케이션을 3개의 계층(Layer)으로 분리한 아키텍처
+	- Presentation Layer, Application Layer, Data Layer
+	- Presentation Layer: 보통 Public Subnet에 위치
+	- Application Layer: 보통 Private Subnet에 위치
+	- Data Layer: 보통 Private Subnet에 위치
+- applicance란?
+	- 기기, 장치, 전용장비
+	- 특정 기능을 수행하도록 미리 구성된 전용 장비 또는 소프트웨어
+- CDN이란?
+	- Content Delivery Network (콘텐츠 전달 네트워크)
+	- "전 세계 여러 서버"에 콘텐츠를 "캐싱"하여 사용자에게 "가장 가까운" 서버에서 빠르게 전달하는 시스템
+	- Amazon CloudFront, Cloudflare, Akamai Technologies, Fastly
