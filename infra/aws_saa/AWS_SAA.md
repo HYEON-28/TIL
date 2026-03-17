@@ -94,26 +94,19 @@
 - 코드 없이 데이터 수집 가능
 - SaaS 데이터 수집 + 운영 최소화 문제 = EC2 제거하고 AppFlow 사용이 정답
 
--AWS Systems Manager: 소프트웨어 패치 관련 서비스
+## AWS Systems Manager
+- 소프트웨어 패치 관련 서비스
 	-AWS Systems Manager Automation: 패치작업 자동화 관리
 	-AWS Systems Manager Patch Manager: 패치작업 자동화 관리
--AWS Systems Manager Run Command: 여러 인스턴스에 대해 원격으로 명령 실행. “긴급한”  패치작업을 즉시 수행가능
+
+## AWS Systems Manager Run Command
+- 여러 인스턴스에 대해 원격으로 명령 실행. “긴급한”  패치작업을 즉시 수행가능
 
 -AWS Snowball Edge
 	-물리적인 데이터 이관. 매우큰 용량의 데이터를 마이그레이션할 때 유용함
 
 - snowmobile
 	-수백 TB~PB
-
-
-
--Amazon FSx for Windows File Server
-	-완전한 Windows 네이티브 파일 시스템
-	-SMB 프로토콜 지원
-	-Active Directory 통합
-
--Amazon EFS
-	-Linux/NFS 전용
 
 -AWS 비용 분석
 	-빠른 비용 분석 & 그래프 -> Cost Explorer
@@ -155,6 +148,10 @@
 - Dashboard Share으로 AWS계정없는 사람도 접근가능
 - 모니터링 및 로그기록
 
+### Cloud Watch EventBridge
+- 스케줄링 가능
+- 이벤트 기반 아키텍처 지원
+
 ## CloudTrail
 - API audit log
 - API 호출기록 (누가 무엇을 했는가)
@@ -174,7 +171,14 @@
 - 여러 EC2 가 동시에 mount 가능
 - 내구성 매우 높음
 - 공유 파일 시스템
+- 표준 파일 시스템
+- Linux/NFS 전용
 
+
+## Amazon FSx for Windows File Server
+- 완전한 Windows 네이티브 파일 시스템
+- SMB 프로토콜 지원
+- Active Directory 통합
 
 ### AWS S3
 데이터 저장용 서비스
@@ -190,6 +194,12 @@
 	- S3에서 가장 저렴한 storage
 	- 장기 백업에 최적
 - 정적 웹사이트(HTML, CSS, JS, 이미지)는 S3가 가장 저렴하고 운영이 필요없는 방식임
+- S3 One Zone-Infrequent Access
+	- 단일 가용 영역(AZ)에만 데이터 저장하는 저비용, 드물게 접근 객체 스토리지
+- Object Lock Compliance Mode(준수 모드)
+	- 모든 사용자, root 포함 삭제 불가. 최대 10년
+- Object Lock Governance Mode(관리 모드)
+	- 권한을 가진 사용자는 삭제 가능
 
 ### S3 File Gateway
 - 온프레미스 파일 서버(SMB/NFS)를 Amazon S3와 연결하여 S3를 사실상 무제한 파일 스토리지처럼 사용하게 해주는 캐시 기반 게이트웨이
@@ -217,7 +227,9 @@
 	- 캐시된 파일 제공: 서버부하 없음
 	- 전 세계 수백개 서버가 트래픽 분산처리
 - 지역설정 따로 할 필요없이 자동으로 사용자 위치기준 가장 가까운 Edge Location으로 연결함
+
 ### Amazon Athena
+- S3데이터 직접 query 가능
 Amazon Athena is an interactive query service that makes it easy to analyze data directly in Amazon Simple Storage Service (Amazon S3) using standard SQL.
 
 ### IAM
@@ -364,3 +376,6 @@ Multipart Upload는 큰 파일을 여러 개의 작은 파트로 나누어 병�
 	- Provisioned IOPS SSD: 원하는 IOPS 직접 설정하고 안정적인 고성능 확보 가능
 - SFTP란?
 	- SSH기반 파일전송 프로토콜
+- call transcript files란?
+	- transcript: 기록된 텍스트
+	- 통화 내용을 텍스트로 기록한 파일(대화 녹취록)
