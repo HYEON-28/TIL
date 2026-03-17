@@ -86,7 +86,13 @@
 - Network ACL (NACL)
 	- 서브넷 단위, IP/Port
 
+## Amazon Macie
+- PII(Personally identifiable information) 탐지
 
+## Amazon AppFlow
+- SaaS(Salesforce, SAP 등) <-> S3 완전 관리형 연동 서비스
+- 코드 없이 데이터 수집 가능
+- SaaS 데이터 수집 + 운영 최소화 문제 = EC2 제거하고 AppFlow 사용이 정답
 
 -AWS Systems Manager: 소프트웨어 패치 관련 서비스
 	-AWS Systems Manager Automation: 패치작업 자동화 관리
@@ -126,11 +132,13 @@
 - 연결가능 데이터소스: S3, RDS, Redshift, Athena, PostgreSQL, MySQL, EXCEL, CSV...
 
 
--예약 인스턴스(Reserved Instance)
--1,3년단위 예약가능
+### 예약 인스턴스(Reserved Instance)
+- 비용할인 목적
+- 1,3년단위 예약가능
 
--온디맨드 용량 예약(On-demand Capacity Reservation)
--1주일 등 짧은기간 예약가능
+### 온디맨드 용량 예약(On-demand Capacity Reservation)
+- 용량확보 목적
+- 1주일 등 짧은기간 예약가능
 
 -RPO(Recovery Point Objective): 복구지점 목표
 -어느시점까지의 데이터 복구가 허용되는가
@@ -164,7 +172,8 @@
 
 ### Amazon Elastic File System (Amazon EFS)
 - 여러 EC2 가 동시에 mount 가능
-- 
+- 내구성 매우 높음
+- 공유 파일 시스템
 
 
 ### AWS S3
@@ -186,6 +195,15 @@
 - 온프레미스 파일 서버(SMB/NFS)를 Amazon S3와 연결하여 S3를 사실상 무제한 파일 스토리지처럼 사용하게 해주는 캐시 기반 게이트웨이
 - 로컬처럼 보이지만 실제 저장은 S3에 함
 - 자주쓰는 파일 -> 로컬 캐시
+
+### NAT Gateway
+- 하나의 AZ를 지정하여 설치함
+- 프라이빗 서브넷의 리소스가 인터넷으로 나갈 수 있게 해주되, 외부에서는 직접 접근하지 못하게 만드는 서비스
+- OS 업데이트, 외부 API 호출, 패키지 설치 등을 위함
+- S3에만 접근이 필요할땐 VPC Endpoint 사용이 정답임
+
+### Gateway VPC Endpoint
+- 
 
 ### AWS KMS(Key Management Ssytem)
 - Multi-Region customer managed key 기능 있음
@@ -227,6 +245,9 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 ### Amazon Simple Notification Service(SNS)
 - 메시지를 여러 구독자에게 동시에 전달하는 AWS의 Pub/Sub(발행-구독) 메시징 서비스입니다.
 - 하나의 이벤트 → 여러 시스템에 동시에 전달(Fan-out) 하는 구조를 쉽게 구현
+- Amazon SNS → AWS Lambda 문제
+	- 네트워크 이슈 시 이벤트 유실
+	- Lambda 실패 -> 자동 재처리 없음
 
 ### Amazon Simple Queue Service (SQS)
 - 플리케이션 간 메시지를 큐(Queue)에 저장하여 비동기적으로 처리하도록 하는 AWS의 완전관리형 메시지 큐 서비스
@@ -260,6 +281,10 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 
 ## Trusted Advisor
 - Best practice recommendation
+
+## AWS Direct Connect
+- 온프레미스 <-> AWS 전용선 연결
+- 인터넷을 완전히 우회. 인터넷 트래픽과 완전 분리
 
 ### Fan-out Architecture
 - 하나의 이벤트(또는 메시지)를 여러 소비자(서비스)에게 동시에 전달하는 아키텍처 패턴
@@ -336,5 +361,6 @@ Multipart Upload는 큰 파일을 여러 개의 작은 파트로 나누어 병�
 	- Input/Output Operations Per Second
 	- 초당 디스크가 처리할 수 있는 입출력 작업 수
 	- 스토리지 성능(DB 속도)를 결정하는 핵심지표
-
-	
+	- Provisioned IOPS SSD: 원하는 IOPS 직접 설정하고 안정적인 고성능 확보 가능
+- SFTP란?
+	- SSH기반 파일전송 프로토콜
