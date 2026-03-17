@@ -94,6 +94,11 @@
 	-빠른 비용 분석 & 그래프 -> Cost Explorer
 	-예산 초과 알림 -> AWS Budgets
 	-아주 상세한 원시 데이터 분석 -> CUR + Athena / QuickSight
+	- raw billing data -> Cost and Usage Report
+
+### Cost Explorer
+- 비용 그래프 분석
+- 서비스 / instance type / tag별 분석
 
 ### Amazon QuickSight
 - 여러 데이터 소스의 데이터를 연결하여 대시보드와 데이터 시각화를 생성하고 조직 내 사용자에게 공유할 수 있는 분석 플랫폼
@@ -147,6 +152,9 @@
 	- 접근 패턴 자동 분석
 	- AZ 장애 보호
 	- 비용 최적화
+- Amazon S3 Glacier Deep Archive
+	- S3에서 가장 저렴한 storage
+	- 장기 백업에 최적
 
 ### S3 File Gateway
 - 온프레미스 파일 서버(SMB/NFS)를 Amazon S3와 연결하여 S3를 사실상 무제한 파일 스토리지처럼 사용하게 해주는 캐시 기반 게이트웨이
