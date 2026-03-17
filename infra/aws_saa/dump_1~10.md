@@ -1,4 +1,4 @@
-# dump문제 1~10번
+# dump문제 1~10번 (5/10)
 
 ## Q1 : S3 (X)
 A company collects data for temperature, humidity, and atmospheric pressure in cities across multiple continents. The average volume of data that the company collects from each site daily is 500 GB. Each site has a high-speed Internet connection.

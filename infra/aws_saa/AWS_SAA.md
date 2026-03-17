@@ -5,6 +5,10 @@
 사용자가 웹이나 앱에서 "무엇을, 어떤 순서로, 언제" 행동했는지를 기록한 로그데이터.
 사용자의 모든 클릭/행동을 시간 순서대로 남긴 데이터
 
+## Amazon Kinesis Data Streams
+- 실시간으로 발생하는 대량의 이벤트 데이터를 수집하고 여러 consumer가 동시에 처리할 수 있게 하는 서비스
+- 순서보장
+
 ## 
 - Amazon Kinesis Data Streams: 실시간 스트리밍 데이터 수집 최적
 - Amazon Kinesis Data Firehose: 운영부담없이 데이터를 자동으로 S3/Redshift/OpenSearch로 전달
@@ -17,16 +21,23 @@
 	- 쿼리문자열 값에 따라 로드밸런서가 서로 다른 백엔드로 트래픽을 보냄
 	- Application Load Balancer만 가능함
 
-- Application Load Balancer (L7: Application)
-	- path-based routing (https://api.example.com/user/login)
-	- host-based routing (https://api.example.com, https://admin.example.com)
-	- HTTP 헤더는 L7에서만 읽기 가능
-	- URL, Path, Query, Header, Host가 나오면 -> ALB
-- Network Load Balancer (L4: Transport)
-	- IP, Port만 확인함
-	- TCP, UDP, 고정IP, 초고성능 -> NLB
-- Gateway Load Balancer (L3~L4)
-	- 방화벽/보안 장비 트래픽 검사
+### Application Load Balancer (L7: Application)
+- path-based routing (https://api.example.com/user/login)
+- host-based routing (https://api.example.com, https://admin.example.com)
+- HTTP 헤더는 L7에서만 읽기 가능
+- URL, Path, Query, Header, Host가 나오면 -> ALB
+
+### Network Load Balancer (L4: Transport)
+- IP, Port만 확인함
+- TCP, UDP, 고정IP, 초고성능 -> NLB
+
+### Gateway Load Balancer (L3~L4)
+- 방화벽/보안 장비 트래픽 검사
+
+### AWS Global Accelerator
+- 글로벌 latency routing을 제공
+- Region 장애 시 자동 Failover
+
 
 - TLS/HTTPS 암호화 = 보안통신
 	- TLS: Transport Layer Security, 네트워크에서 데이터를 암호화하여 안전하게 전송
@@ -53,10 +64,20 @@
 ### AWS WAF(Web Applicaiton Firewall)
 - 인바운드 트래픽용
 - 악성트래픽으로부터 웹 어플리케이션 보호
-- HTTP/HTTPS 트래픽 검사, SQL 인젝션, 크로스 사이트 스크립팅(XSS)등 공격 방어
+- HTTP/HTTPS 트래픽 검사, "SQL 인젝션", 크로스 사이트 스크립팅(XSS)등 공격 방어
 
 ### Amazon GuardDuty
-- AWS 계정과 리소스에서 발생하는 로그를 분석해 보안 위협을 자동으로 탐지, 보안경고 생성
+- AWS 계정과 리소스에서 발생하는 로그를 분석해 보안 "위협을 자동으로 탐지", 보안경고 생성
+- Threat detection
+- DDos용은 아님
+
+## AWS Shield
+- AWS Shield Standard: 기본 제공, 자동 보호
+- AWS Shield Advanced: 고급 DDoS 보호
+
+## Inspector
+- Security vulnerability
+- EC2 취약점 스캔 등
 
 - 보안그룹
 	- 인스턴스 단위, IP/Port 기반
@@ -65,9 +86,7 @@
 - Network ACL (NACL)
 	- 서브넷 단위, IP/Port
 
-- 배스천 호스트(Bastion Host)
--프라이빗 서브넷에 있는 서버에 안전하게 접근하기 위한 “중간 관문용 서버”
--외부 네트워크와 내부 보호 영역 사이에 두는 “단일 진입 지점”
+
 
 -AWS Systems Manager: 소프트웨어 패치 관련 서비스
 	-AWS Systems Manager Automation: 패치작업 자동화 관리
@@ -124,7 +143,13 @@
 
 -Amazon RDS: 장기간 사용할 데이터베이스 인스턴스 예약 기능: RDS Reserved Service
 
--AWS Cloud Watch: Dashboard Share으로 AWS계정없는 사람도 접근가능
+### AWS Cloud Watch
+- Dashboard Share으로 AWS계정없는 사람도 접근가능
+- 모니터링 및 로그기록
+
+## CloudTrail
+- API audit log
+- API 호출기록 (누가 무엇을 했는가)
 
 
 ### Amazon Elastic Block Store (Amazon EBS) 
@@ -155,11 +180,16 @@
 - Amazon S3 Glacier Deep Archive
 	- S3에서 가장 저렴한 storage
 	- 장기 백업에 최적
+- 정적 웹사이트(HTML, CSS, JS, 이미지)는 S3가 가장 저렴하고 운영이 필요없는 방식임
 
 ### S3 File Gateway
 - 온프레미스 파일 서버(SMB/NFS)를 Amazon S3와 연결하여 S3를 사실상 무제한 파일 스토리지처럼 사용하게 해주는 캐시 기반 게이트웨이
 - 로컬처럼 보이지만 실제 저장은 S3에 함
 - 자주쓰는 파일 -> 로컬 캐시
+
+### AWS KMS(Key Management Ssytem)
+- Multi-Region customer managed key 기능 있음
+- 여러 region에 replica key 생성
 
 ### Clould Front
 - 정적파일 글로벌 배포: S3 + Cloud Front
@@ -168,7 +198,7 @@
 - 초고트래픽 대응의 핵심 기술 중 하나
 	- 캐시된 파일 제공: 서버부하 없음
 	- 전 세계 수백개 서버가 트래픽 분산처리
-
+- 지역설정 따로 할 필요없이 자동으로 사용자 위치기준 가장 가까운 Edge Location으로 연결함
 ### Amazon Athena
 Amazon Athena is an interactive query service that makes it easy to analyze data directly in Amazon Simple Storage Service (Amazon S3) using standard SQL.
 
@@ -219,6 +249,17 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 - RDS: Auto Scaling안됨
 - MySQL/PostgreSQL만 지원
 
+## AWS Config
+- AWS 리소스 설정 변경 추적
+- Configuration history 저장
+- Compliance rule 검사
+- rule: required-tags 같은것 추가가능
+
+
+
+
+## Trusted Advisor
+- Best practice recommendation
 
 ### Fan-out Architecture
 - 하나의 이벤트(또는 메시지)를 여러 소비자(서비스)에게 동시에 전달하는 아키텍처 패턴
@@ -255,6 +296,7 @@ Feed Update  Notification  Search Index  Analytics
        EC2 Workers
 
 
+
 ### 그 외 지식
 - multipart upload란?
 Multipart Upload는 큰 파일을 여러 개의 작은 파트로 나누어 병렬로 업로드한 후 Amazon S3에서 하나의 객체로 합치는 업로드 방식이다. 대용량 데이터를 빠르고 안정적으로 업로드하기 위해 사용.
@@ -287,3 +329,12 @@ Multipart Upload는 큰 파일을 여러 개의 작은 파트로 나누어 병�
 	- Content Delivery Network (콘텐츠 전달 네트워크)
 	- "전 세계 여러 서버"에 콘텐츠를 "캐싱"하여 사용자에게 "가장 가까운" 서버에서 빠르게 전달하는 시스템
 	- Amazon CloudFront, Cloudflare, Akamai Technologies, Fastly
+- 배스천 호스트(Bastion Host)란?
+	- 프라이빗 서브넷에 있는 서버에 안전하게 접근하기 위한 “중간 관문용 서버”
+	- 외부 네트워크와 내부 보호 영역 사이에 두는 “단일 진입 지점”
+- IOPS란?
+	- Input/Output Operations Per Second
+	- 초당 디스크가 처리할 수 있는 입출력 작업 수
+	- 스토리지 성능(DB 속도)를 결정하는 핵심지표
+
+	
