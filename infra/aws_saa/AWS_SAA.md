@@ -1,6 +1,18 @@
 공부중 링크: https://pacloud.tistory.com/45
 # AWS Certified Solutions Architect - Associate 공부
 
+## VPC
+
+## Region
+- 물리적으로 떨어진 "지리적 영역"
+- 큰 단위(국가/대륙)
+- 사용목적: DR(재해복구), 글로벌 서비스
+
+## Availability Zone(AZ)
+- Region 내부의 "격리된 데이터센터 그룹"
+- 작은 단위
+- 사용목적: HA(고가용성)
+
 ## 클릭스트림 데이터
 사용자가 웹이나 앱에서 "무엇을, 어떤 순서로, 언제" 행동했는지를 기록한 로그데이터.
 사용자의 모든 클릭/행동을 시간 순서대로 남긴 데이터
@@ -9,23 +21,26 @@
 - 실시간으로 발생하는 대량의 이벤트 데이터를 수집하고 여러 consumer가 동시에 처리할 수 있게 하는 서비스
 - 순서보장
 
+## Amazon Redshift
+- 대규모 클릭스트림 데이터 고속분석(OLAP) 가능 대규모 데이터에 대해 복잡한 SQL분석을 빠르게 수행함
+
 ## 
 - Amazon Kinesis Data Streams: 실시간 스트리밍 데이터 수집 최적
 - Amazon Kinesis Data Firehose: 운영부담없이 데이터를 자동으로 S3/Redshift/OpenSearch로 전달
 - Amazon S3 데이터 레이크: 30TB/day 같은 많은 데이터 저장가능
-- Amazon Redshift: 대규모 클릭스트림 데이터 고속분석(OLAP) 가능
-	대규모 데이터에 대해 복잡한 SQL분석을 빠르게 수행함
 
 - 쿼리 문자열 기반 라우팅
 	- 쿼리 문자열(query string): url에서 ?뒤에 붙는 파라미터
 	- 쿼리문자열 값에 따라 로드밸런서가 서로 다른 백엔드로 트래픽을 보냄
 	- Application Load Balancer만 가능함
 
-### Application Load Balancer (L7: Application)
+### Application Load Balancer (L7: Application) ALB
 - path-based routing (https://api.example.com/user/login)
 - host-based routing (https://api.example.com, https://admin.example.com)
 - HTTP 헤더는 L7에서만 읽기 가능
 - URL, Path, Query, Header, Host가 나오면 -> ALB
+- ALB Listener Redirect: HTTP -> HTTPS 강제 전환 가능
+- health check
 
 ### Network Load Balancer (L4: Transport)
 - IP, Port만 확인함
@@ -86,6 +101,16 @@
 - Network ACL (NACL)
 	- 서브넷 단위, IP/Port
 
+## Route53
+- AWS의 DNS 서비스
+- 도메인이름을 실제 서버(IP/리소스)로 연결하고 트래픽을 지능적으로 라우팅 하는 서비스
+
+
+## AWS Certificate Manager(ACM)
+- 웹 서비스에 HTTPS 보안 통신을 적용하기 위한 인증서를 발급/관리해주는 서비스
+- HTTPS를 쓰려면 SSL/TLS 인증서 필요한데 ACM이 대신 발급&관리
+- 외부 CA쓰려면 ACM IMPORT + 수동 Rotation
+
 ## Amazon Macie
 - PII(Personally identifiable information) 탐지
 
@@ -133,13 +158,6 @@
 - 용량확보 목적
 - 1주일 등 짧은기간 예약가능
 
--RPO(Recovery Point Objective): 복구지점 목표
--어느시점까지의 데이터 복구가 허용되는가
--최대 얼마나 많은 데이터의 손실을 허용할것인가
-
--RTO(Recovery Time Objective): 복구시간 목표
--얼마나 빨리 시스템을 복구해야 하는가?
-
 -팬아웃 구조: 하나의 이벤트(메시지)를 여러 소비자에게 동시에 전달하는 구조
 
 -Amazon RDS: 장기간 사용할 데이터베이스 인스턴스 예약 기능: RDS Reserved Service
@@ -156,6 +174,14 @@
 - API audit log
 - API 호출기록 (누가 무엇을 했는가)
 
+### Amazon Elastic Container Service(Amazon ECS)
+- Docker 컨테이너를 "배포 + 스케일링 + 운영"까지 자동으로 관리해주는 서비스
+- 쿠버네티스와 같은 역할. 하지만 AWS에 특화된 더 단순한 대안
+
+### AWS Fargate
+- 컨테이너 실행만 하면 됨
+- 서버(EC2) 관리 완전히 제거
+- ECS + Fargate 조합으로 서버 프로비저닝, 오토스케일링 자동, 고가용성 자동 지원
 
 ### Amazon Elastic Block Store (Amazon EBS) 
 - EBS = EC2 전용(EC2에서만 쓰는) 가상 하드디스크
@@ -196,6 +222,8 @@
 - 정적 웹사이트(HTML, CSS, JS, 이미지)는 S3가 가장 저렴하고 운영이 필요없는 방식임
 - S3 One Zone-Infrequent Access
 	- 단일 가용 영역(AZ)에만 데이터 저장하는 저비용, 드물게 접근 객체 스토리지
+- S3 Standard Infrequent Access
+	- 드물게 접근
 - Object Lock Compliance Mode(준수 모드)
 	- 모든 사용자, root 포함 삭제 불가. 최대 10년
 - Object Lock Governance Mode(관리 모드)
@@ -242,6 +270,13 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 - ECS -> S3 : IAM Role
 - 사용자 로그인 : IAM User
 
+### Lambda
+- 대규모 + 변동트래픽 -> Serverless가 최적
+
+### AWS Elastic Beanstalk
+- 코드만 올리면 AWS가 서버/배포/스케일링까지 자동으로 관리해주는 PaaS 서비스
+- 내부적으로 여러 서비스를 자동으로 사용하도록 되어있음
+
 ### VPC Endpoint
  <키워드>
 - Private access to S3
@@ -266,6 +301,7 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 - 사용 이유: 서비스 분리(Decoupling), 서비스끼리 직접 호출하지 않음
 - Standard Queue: 순서 보장X
 - FIFO Queue: 순서 보장O
+- ChangeMessageVisibility: 메시지를 다른 소비자가 못보게 하는 시간 변경 (메시지 중복처리 방지)
 
 ### AWS Secrets Manager
 - automatic rotation
@@ -281,6 +317,14 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 - Multi-AZ: 고가용성
 - RDS: Auto Scaling안됨
 - MySQL/PostgreSQL만 지원
+
+## DynamoDB
+- point-in-time recovery
+
+## RDS Proxy
+- DB 연결 pooling(애플리케이션 -> RDS Proxy -> DB)
+	- DB연결 수 급증 방지
+- 최소 downtime
 
 ## AWS Config
 - AWS 리소스 설정 변경 추적
@@ -332,7 +376,17 @@ Feed Update  Notification  Search Index  Analytics
      Auto Scaling Group
        EC2 Workers
 
-
+### 데이터 분석 서비스
+- Amazon Comprehend
+	- 텍스트 분석 서비스
+	- comprehend medical: 의료민감정보 식별
+- Amazon Rekognition
+	- 이미지/영상 분석 서비스
+- Amazon SageMaker
+	- ML모델 직접 구축 필요
+	- 커스텀 ML
+- Amazon Textract
+	- PDF/JPEG에서 텍스트 추출
 
 ### 그 외 지식
 - multipart upload란?
@@ -379,3 +433,10 @@ Multipart Upload는 큰 파일을 여러 개의 작은 파트로 나누어 병�
 - call transcript files란?
 	- transcript: 기록된 텍스트
 	- 통화 내용을 텍스트로 기록한 파일(대화 녹취록)
+- RPO(Recovery Point Objective)란?
+	- 복구지점 목표
+	- 어느시점까지의 데이터 복구가 허용되는가
+	- 최대 얼마나 많은 데이터의 손실을 허용할것인가
+- RTO(Recovery Time Objective)란?
+	- 복구시간 목표
+	- 얼마나 빨리 시스템을 복구해야 하는가?
