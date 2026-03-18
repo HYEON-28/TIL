@@ -2,6 +2,16 @@
 # AWS Certified Solutions Architect - Associate 공부
 
 ## VPC
+- 같은 VPC 내라면 서브넷이 달라도 Private IP로 통신 가능함
+
+## VPC Endpoint
+- Private access to S3
+- No internet access
+- Access S3 from VPC
+- Secure connection
+- 인터넷 게이트웨이/NAT Gateway 사용안하며 무료
+- S3 + 같은 Region + 비용 절감 -> 무조건 VPC Endpoint
+- DynamoDB도 동일함
 
 ## Region
 - 물리적으로 떨어진 "지리적 영역"
@@ -12,6 +22,9 @@
 - Region 내부의 "격리된 데이터센터 그룹"
 - 작은 단위
 - 사용목적: HA(고가용성)
+
+## Security Group
+- 기본적으로 Outbound All Allow
 
 ## 클릭스트림 데이터
 사용자가 웹이나 앱에서 "무엇을, 어떤 순서로, 언제" 행동했는지를 기록한 로그데이터.
@@ -276,13 +289,6 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 ### AWS Elastic Beanstalk
 - 코드만 올리면 AWS가 서버/배포/스케일링까지 자동으로 관리해주는 PaaS 서비스
 - 내부적으로 여러 서비스를 자동으로 사용하도록 되어있음
-
-### VPC Endpoint
- <키워드>
-- Private access to S3
-- No internet access
-- Access S3 from VPC
-- Secure connection
 
 ### 데이터 업로드
 - 10TB 이하 인터넷 업로드
