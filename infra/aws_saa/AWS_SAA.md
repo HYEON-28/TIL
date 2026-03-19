@@ -37,6 +37,7 @@
 
 ## AWS Glue
 - 완전관리형 ETL(Extract, Transform, Load) 서비스
+- Job Bookmark
 
 ## Amazon Redshift
 - 대규모 클릭스트림 데이터 고속분석(OLAP) 가능 대규모 데이터에 대해 복잡한 SQL분석을 빠르게 수행함
@@ -257,9 +258,12 @@
 	- 모든 사용자, root 포함 삭제 불가. 최대 10년
 - Object Lock Governance Mode(관리 모드)
 	- 권한을 가진 사용자는 삭제 가능
+- Retention Period: 기간 고정, 기간이 지나야 수정가능
+- Legal Hold: 기간 정하지않음, 언제든 해제가능
 - Read-only ACL: 버킷 사용자는 객체 삭제/수정 가능
 - Requester Pays: 데이터 요청자가 데이터 전송비용 부담
 - Cross-account access: 다운로드 시 데이터 전송비용은 버킷 소유자 부담
+
 
 ### S3 File Gateway
 - 온프레미스 파일 서버(SMB/NFS)를 Amazon S3와 연결하여 S3를 사실상 무제한 파일 스토리지처럼 사용하게 해주는 캐시 기반 게이트웨이
@@ -279,6 +283,8 @@
 ### AWS KMS(Key Management Ssytem)
 - Multi-Region customer managed key 기능 있음
 - 여러 region에 replica key 생성
+- 키 사용 로그 기록
+
 
 ### Clould Front
 - 정적파일 글로벌 배포: S3 + Cloud Front
@@ -305,6 +311,8 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 
 ### Lambda
 - 대규모 + 변동트래픽 -> Serverless가 최적
+- Execution Role: Lambda가 다른서비스 호출할 때
+- Resource-based Policy: 누가 Lambda를 호출할 수 있는지
 
 ### AWS Elastic Beanstalk
 - 코드만 올리면 AWS가 서버/배포/스케일링까지 자동으로 관리해주는 PaaS 서비스
@@ -427,7 +435,7 @@ Feed Update  Notification  Search Index  Analytics
 Multipart Upload는 큰 파일을 여러 개의 작은 파트로 나누어 병렬로 업로드한 후 Amazon S3에서 하나의 객체로 합치는 업로드 방식이다. 대용량 데이터를 빠르고 안정적으로 업로드하기 위해 사용.
 - NFS(Network File System)란?
 	- 네트워크를 통해 파일 시스템을 공유하는 표준 프로토콜
-	- 다른 서버에 있는 디스크를 내 서버의 폴더처럼 쓰게 해주는 방식
+	- 다른 서버에 있는 디스크를 내 서버의 폴더처럼 마운트하여 쓰게 해주는 방식 
 	- Linux/Unix에서 주로 사용
 - SMB file server란?
 	- Server Message Block
@@ -482,3 +490,6 @@ Multipart Upload는 큰 파일을 여러 개의 작은 파트로 나누어 병�
 - non-VPC 트래픽이란?
 	- VPC내부의 IP주소 범위이면 VPC 트래픽
 	- 그 외부로 나가는 트래픽이면 non-VPC 트래픽(인터넷으로 나감)
+- at-rest 암호화란?
+	- "rest" = 가만히 있는 상태 (데이터가 저장되어 있는 상태)
+	- 디스크에 쓸 때 암호화, 읽을 때 복호화
