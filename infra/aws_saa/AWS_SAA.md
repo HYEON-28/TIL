@@ -3,6 +3,7 @@
 
 ## VPC
 - 같은 VPC 내라면 서브넷이 달라도 Private IP로 통신 가능함
+- 특정 리전에 속함
 
 ## VPC Endpoint
 - Private access to S3
@@ -26,13 +27,16 @@
 ## Security Group
 - 기본적으로 Outbound All Allow
 
-## 클릭스트림 데이터
-사용자가 웹이나 앱에서 "무엇을, 어떤 순서로, 언제" 행동했는지를 기록한 로그데이터.
-사용자의 모든 클릭/행동을 시간 순서대로 남긴 데이터
+## Amazon AMI(Amazon Machine Image)
+- AWS에서 EC2인스턴스를 생성할 때 사용하는 템플릿 이미지
+- 서버의 운영체제(OS), 애플리케이션, 설정, 데이터 디스크(EBS)등을 포함한 완전한 스냅샷
 
 ## Amazon Kinesis Data Streams
 - 실시간으로 발생하는 대량의 이벤트 데이터를 수집하고 여러 consumer가 동시에 처리할 수 있게 하는 서비스
 - 순서보장
+
+## AWS Glue
+- 완전관리형 ETL(Extract, Transform, Load) 서비스
 
 ## Amazon Redshift
 - 대규모 클릭스트림 데이터 고속분석(OLAP) 가능 대규모 데이터에 대해 복잡한 SQL분석을 빠르게 수행함
@@ -123,6 +127,7 @@
 - 웹 서비스에 HTTPS 보안 통신을 적용하기 위한 인증서를 발급/관리해주는 서비스
 - HTTPS를 쓰려면 SSL/TLS 인증서 필요한데 ACM이 대신 발급&관리
 - 외부 CA쓰려면 ACM IMPORT + 수동 Rotation
+- 자동만료알림 제공X
 
 ## Amazon Macie
 - PII(Personally identifiable information) 탐지
@@ -187,6 +192,13 @@
 - API audit log
 - API 호출기록 (누가 무엇을 했는가)
 
+## EC2서버
+- 구매옵션
+	- On-Demand: 필요할때만 사용, 시간단위 요금
+	- Reserved Instance: 1~3년 약정, 24/7 사용기준 할인
+	- Spot Instance: AWS 잉여용량 활용, 90%이상 할인가능, 중단가능
+	- Spot Block: Spot+일정 시간 보장
+
 ### Amazon Elastic Container Service(Amazon ECS)
 - Docker 컨테이너를 "배포 + 스케일링 + 운영"까지 자동으로 관리해주는 서비스
 - 쿠버네티스와 같은 역할. 하지만 AWS에 특화된 더 단순한 대안
@@ -198,6 +210,7 @@
 
 ### Amazon Elastic Block Store (Amazon EBS) 
 - EBS = EC2 전용(EC2에서만 쓰는) 가상 하드디스크
+- 단일 AZ
 - 스냅샷 기능 -> S3에 저장가능
 - 키워드
 	- EC2 디스크
@@ -218,12 +231,15 @@
 - 완전한 Windows 네이티브 파일 시스템
 - SMB 프로토콜 지원
 - Active Directory 통합
+- FSx for Lustre
+	- Lustre 네이티브 파일 시스템 제공
 
 ### AWS S3
 데이터 저장용 서비스
 - S3 Transfer Acceleration: From GLOBAL sites as quickly as possible in a SINGLE S3 bucket. Minimize operational complexity
 - VPC외부에 있는 글로벌 퍼블릭 서비스
 - EC2에서 S3에 접근 시 보통 인터넷 없이 접근. S3는 Gateway Endpoint 많이 사용함
+	- 프라이빗 네트워크 연결
 - Amazon S3 Intelligent-Tiering
 	- 자동 계층 이동(Frequent <-> Infrequent)
 	- 접근 패턴 자동 분석
@@ -241,6 +257,9 @@
 	- 모든 사용자, root 포함 삭제 불가. 최대 10년
 - Object Lock Governance Mode(관리 모드)
 	- 권한을 가진 사용자는 삭제 가능
+- Read-only ACL: 버킷 사용자는 객체 삭제/수정 가능
+- Requester Pays: 데이터 요청자가 데이터 전송비용 부담
+- Cross-account access: 다운로드 시 데이터 전송비용은 버킷 소유자 부담
 
 ### S3 File Gateway
 - 온프레미스 파일 서버(SMB/NFS)를 Amazon S3와 연결하여 S3를 사실상 무제한 파일 스토리지처럼 사용하게 해주는 캐시 기반 게이트웨이
@@ -252,6 +271,7 @@
 - 프라이빗 서브넷의 리소스가 인터넷으로 나갈 수 있게 해주되, 외부에서는 직접 접근하지 못하게 만드는 서비스
 - OS 업데이트, 외부 API 호출, 패키지 설치 등을 위함
 - S3에만 접근이 필요할땐 VPC Endpoint 사용이 정답임
+- Public Subnet에 배치해야하며 Private Subnet에서 NAT Gateway로 트래픽 라우팅
 
 ### Gateway VPC Endpoint
 - 
@@ -323,14 +343,19 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 - Multi-AZ: 고가용성
 - RDS: Auto Scaling안됨
 - MySQL/PostgreSQL만 지원
+- Aurora Database Cloning: 기존 Aurora DB의 스냅샷을 기반으로 즉시
+스테이징/개발 DB를 생성.
 
 ## DynamoDB
 - point-in-time recovery
+- On-demand capacity mode: 읽기/쓰기 트래픽이 불규칙적일때. 사용한 만큼 요금부과
+- auto scaling: 반응 지연 가능
 
 ## RDS Proxy
 - DB 연결 pooling(애플리케이션 -> RDS Proxy -> DB)
 	- DB연결 수 급증 방지
 - 최소 downtime
+- DB 업그레이드중에는 연결불가 -> 일부요청 손실 가능
 
 ## AWS Config
 - AWS 리소스 설정 변경 추적
@@ -347,6 +372,9 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 ## AWS Direct Connect
 - 온프레미스 <-> AWS 전용선 연결
 - 인터넷을 완전히 우회. 인터넷 트래픽과 완전 분리
+
+## AWS DataSync
+- 온프레미스 스토리지와 AWS 클라우드 간, 혹은 AWS 서비스 간 데이터 전송을 안전하고 빠르게 자동화 하는 서비스
 
 ### Fan-out Architecture
 - 하나의 이벤트(또는 메시지)를 여러 소비자(서비스)에게 동시에 전달하는 아키텍처 패턴
@@ -446,3 +474,11 @@ Multipart Upload는 큰 파일을 여러 개의 작은 파트로 나누어 병�
 - RTO(Recovery Time Objective)란?
 	- 복구시간 목표
 	- 얼마나 빨리 시스템을 복구해야 하는가?
+- 클릭스트림 데이터란?
+	- 사용자가 웹이나 앱에서 "무엇을, 어떤 순서로, 언제" 행동했는지를 기록한 로그데이터.
+	- 사용자의 모든 클릭/행동을 시간 순서대로 남긴 데이터
+- Source IP란?
+	- 요청을 보내는 위치의 IP주소
+- non-VPC 트래픽이란?
+	- VPC내부의 IP주소 범위이면 VPC 트래픽
+	- 그 외부로 나가는 트래픽이면 non-VPC 트래픽(인터넷으로 나감)
