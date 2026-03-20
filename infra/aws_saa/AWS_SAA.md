@@ -82,7 +82,7 @@
 ### AWS Global Accelerator
 - 글로벌 latency routing을 제공
 - Region 장애 시 자동 Failover
-
+- AWS 글로벌 네트워크 통해 최적 리전으로 전달
 
 - TLS/HTTPS 암호화 = 보안통신
 	- TLS: Transport Layer Security, 네트워크에서 데이터를 암호화하여 안전하게 전송
