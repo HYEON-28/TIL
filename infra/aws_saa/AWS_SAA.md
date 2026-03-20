@@ -36,7 +36,9 @@
 - 순서보장
 
 ## AWS Glue
+- 데이터 변환작업
 - 완전관리형 ETL(Extract, Transform, Load) 서비스
+- 데이터 전송 이후 가공/변환 처리 담당
 - Job Bookmark
 
 ## Amazon Redshift
@@ -44,7 +46,11 @@
 
 ## 
 - Amazon Kinesis Data Streams: 실시간 스트리밍 데이터 수집 최적
-- Amazon Kinesis Data Firehose: 운영부담없이 데이터를 자동으로 S3/Redshift/OpenSearch로 전달
+
+## Amazon Kinesis Data Firehose
+- 운영부담없이 데이터를 자동으로 S3/Redshift/OpenSearch로 전달
+- CloudWatch -> Firehose -> OpenSearch로 전송 지원, Near real-time
+
 - Amazon S3 데이터 레이크: 30TB/day 같은 많은 데이터 저장가능
 
 - 쿼리 문자열 기반 라우팅
@@ -52,7 +58,13 @@
 	- 쿼리문자열 값에 따라 로드밸런서가 서로 다른 백엔드로 트래픽을 보냄
 	- Application Load Balancer만 가능함
 
-### Application Load Balancer (L7: Application) ALB
+## API Gateway
+- 초당 요청 제한, 사용자별 quota 등 기능 있음 (직접 구현하기 힘듦)
+- AWS Shield(DDoS, 공격방어), AWS WAF등 사용가능
+- EC2만 쓰면 직접 방어 시스템 구축필요
+- 인증시스템
+
+## Application Load Balancer (L7: Application) ALB
 - path-based routing (https://api.example.com/user/login)
 - host-based routing (https://api.example.com, https://admin.example.com)
 - HTTP 헤더는 L7에서만 읽기 가능
@@ -184,6 +196,7 @@
 ### AWS Cloud Watch
 - Dashboard Share으로 AWS계정없는 사람도 접근가능
 - 모니터링 및 로그기록
+- OpenSearch로 직접 연결은 제공X
 
 ### Cloud Watch EventBridge
 - 스케줄링 가능
@@ -237,6 +250,7 @@
 
 ### AWS S3
 데이터 저장용 서비스
+- 다중AZ 자동 복제
 - S3 Transfer Acceleration: From GLOBAL sites as quickly as possible in a SINGLE S3 bucket. Minimize operational complexity
 - VPC외부에 있는 글로벌 퍼블릭 서비스
 - EC2에서 S3에 접근 시 보통 인터넷 없이 접근. S3는 Gateway Endpoint 많이 사용함
@@ -320,6 +334,7 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 
 ### 데이터 업로드
 - 10TB 이하 인터넷 업로드
+- ~8TB : Snowcone
 - 10TB ~ 100TB : Snowball
 - 100TB 이상: SnowMobile
 
@@ -337,6 +352,9 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 - FIFO Queue: 순서 보장O
 - ChangeMessageVisibility: 메시지를 다른 소비자가 못보게 하는 시간 변경 (메시지 중복처리 방지)
 
+### Amazon MQ
+- Apache ActiveMQ: 기존 오픈소스 메시지 브로커 -> AmazonMQ와 호환
+- 
 ### AWS Secrets Manager
 - automatic rotation
 - DB 자격증명(username/password)을 안전하게 저장하고 자동으로 교체
@@ -358,6 +376,10 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 - point-in-time recovery
 - On-demand capacity mode: 읽기/쓰기 트래픽이 불규칙적일때. 사용한 만큼 요금부과
 - auto scaling: 반응 지연 가능
+
+## Amazon RDS for MySQL Multi-AZ
+- 자동 장애복구 + 높은 가용성 + 운영 최소화
+- HA 구조
 
 ## RDS Proxy
 - DB 연결 pooling(애플리케이션 -> RDS Proxy -> DB)
@@ -383,6 +405,7 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 
 ## AWS DataSync
 - 온프레미스 스토리지와 AWS 클라우드 간, 혹은 AWS 서비스 간 데이터 전송을 안전하고 빠르게 자동화 하는 서비스
+- 네트워크 사용함
 
 ### Fan-out Architecture
 - 하나의 이벤트(또는 메시지)를 여러 소비자(서비스)에게 동시에 전달하는 아키텍처 패턴
@@ -493,3 +516,5 @@ Multipart Upload는 큰 파일을 여러 개의 작은 파트로 나누어 병�
 - at-rest 암호화란?
 	- "rest" = 가만히 있는 상태 (데이터가 저장되어 있는 상태)
 	- 디스크에 쓸 때 암호화, 읽을 때 복호화
+- active/standby brokers란?
+	- 메시지 브로커를 2개 두고, 하나는 운영, 하나는 대기하다가 장애 시 자동전환
