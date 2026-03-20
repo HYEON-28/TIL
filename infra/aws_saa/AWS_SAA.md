@@ -71,6 +71,7 @@
 - URL, Path, Query, Header, Host가 나오면 -> ALB
 - ALB Listener Redirect: HTTP -> HTTPS 강제 전환 가능
 - health check
+- public subnet 위치
 
 ### Network Load Balancer (L4: Transport)
 - IP, Port만 확인함
@@ -210,8 +211,9 @@
 - 구매옵션
 	- On-Demand: 필요할때만 사용, 시간단위 요금
 	- Reserved Instance: 1~3년 약정, 24/7 사용기준 할인
-	- Spot Instance: AWS 잉여용량 활용, 90%이상 할인가능, 중단가능
+	- Spot Instance: AWS 잉여용량 활용, 90%이상 할인가능, 대신 갑자기 중단가능(stateless일 때)
 	- Spot Block: Spot+일정 시간 보장
+- Target Tracking Scaling Policy: 특정 지표(CPU 40% 같은 용도)
 
 ### Amazon Elastic Container Service(Amazon ECS)
 - Docker 컨테이너를 "배포 + 스케일링 + 운영"까지 자동으로 관리해주는 서비스
@@ -232,6 +234,7 @@
 	- block storage
 	- OS disk
 - EBS fast snapshot restore
+- EC2 Instance Store가 I/O Performance는 더 좋음
 
 ### Amazon Elastic File System (Amazon EFS)
 - 여러 EC2 가 동시에 mount 가능
