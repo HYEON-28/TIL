@@ -84,6 +84,7 @@
 - 글로벌 latency routing을 제공
 - Region 장애 시 자동 Failover
 - AWS 글로벌 네트워크 통해 최적 리전으로 전달
+- Static IP 제공: 글로벌 고정 Anycast IP + 트래픽 가속
 
 - TLS/HTTPS 암호화 = 보안통신
 	- TLS: Transport Layer Security, 네트워크에서 데이터를 암호화하여 안전하게 전송
@@ -186,6 +187,10 @@
 - 비용할인 목적
 - 1,3년단위 예약가능
 
+## EC2 Dedicated Instance
+- 하드웨어를 다른 고객과 공유하지 않는 EC2 인스턴스
+- 매우비쌈
+
 ### 온디맨드 용량 예약(On-demand Capacity Reservation)
 - 용량확보 목적
 - 1주일 등 짧은기간 예약가능
@@ -202,6 +207,8 @@
 ### Cloud Watch EventBridge
 - 스케줄링 가능
 - 이벤트 기반 아키텍처 지원
+- 이벤트 라우팅 허브(중앙 브로커)
+
 
 ## CloudTrail
 - API audit log
@@ -280,7 +287,10 @@
 - Read-only ACL: 버킷 사용자는 객체 삭제/수정 가능
 - Requester Pays: 데이터 요청자가 데이터 전송비용 부담
 - Cross-account access: 다운로드 시 데이터 전송비용은 버킷 소유자 부담
-
+- Origin Access Identity(OAI)
+	- S3 전용, CouldFront만 접근가능하게 한다던지..
+- Origin Access Control
+	- S3 + 확장가능구조
 
 ### S3 File Gateway
 - 온프레미스 파일 서버(SMB/NFS)를 Amazon S3와 연결하여 S3를 사실상 무제한 파일 스토리지처럼 사용하게 해주는 캐시 기반 게이트웨이
@@ -303,7 +313,7 @@
 - 키 사용 로그 기록
 
 
-### Clould Front
+### Cloud Front
 - 정적파일 글로벌 배포: S3 + Cloud Front
 - 정적 콘텐츠: S3캐싱
 - 동적 콘텐츠: ALB/EC2 전달
@@ -311,6 +321,8 @@
 	- 캐시된 파일 제공: 서버부하 없음
 	- 전 세계 수백개 서버가 트래픽 분산처리
 - 지역설정 따로 할 필요없이 자동으로 사용자 위치기준 가장 가까운 Edge Location으로 연결함
+- 글로벌 네트워크 최적화로 가장 가까운 Edge Location 연결 후 AWS전용 백본망으로 Origin까지 전달함
+	-> 일반 인터넷보다 훨씬 빠르고 안정적
 
 ### Amazon Athena
 - S3데이터 직접 query 가능
@@ -383,6 +395,7 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 ## Amazon RDS for MySQL Multi-AZ
 - 자동 장애복구 + 높은 가용성 + 운영 최소화
 - HA 구조
+- RDS Custom: OS 접근 가능
 
 ## RDS Proxy
 - DB 연결 pooling(애플리케이션 -> RDS Proxy -> DB)
