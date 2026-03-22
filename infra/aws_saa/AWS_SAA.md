@@ -41,22 +41,33 @@
 - 데이터 전송 이후 가공/변환 처리 담당
 - Job Bookmark
 
+## Kinesis vs Glue vs Athena
+- Kinesis: 실시간 처리
+- Glue: 데이터 ETL(정제/변환/적재)
+- Athena: 저장된 데이터 분석/쿼리
+[ Kinesis ] → [ Glue ] → [ S3 ] → [ Athena ]
+   (수집)        (정제)      (저장)     (분석)
+
 ## Amazon Redshift
 - 대규모 클릭스트림 데이터 고속분석(OLAP) 가능 대규모 데이터에 대해 복잡한 SQL분석을 빠르게 수행함
 
 ## 
 - Amazon Kinesis Data Streams: 실시간 스트리밍 데이터 수집 최적
+- 쿼리 문자열 기반 라우팅
+	- 쿼리 문자열(query string): url에서 ?뒤에 붙는 파라미터
+	- 쿼리문자열 값에 따라 로드밸런서가 서로 다른 백엔드로 트래픽을 보냄
+	- Application Load Balancer만 가능함
+
 
 ## Amazon Kinesis Data Firehose
 - 운영부담없이 데이터를 자동으로 S3/Redshift/OpenSearch로 전달
 - CloudWatch -> Firehose -> OpenSearch로 전송 지원, Near real-time
 
-- Amazon S3 데이터 레이크: 30TB/day 같은 많은 데이터 저장가능
 
-- 쿼리 문자열 기반 라우팅
-	- 쿼리 문자열(query string): url에서 ?뒤에 붙는 파라미터
-	- 쿼리문자열 값에 따라 로드밸런서가 서로 다른 백엔드로 트래픽을 보냄
-	- Application Load Balancer만 가능함
+## Amazon S3 DataLake
+- 30TB/day 같은 많은 데이터 저장가능
+
+
 
 ## API Gateway
 - 초당 요청 제한, 사용자별 quota 등 기능 있음 (직접 구현하기 힘듦)
@@ -112,6 +123,7 @@
 - 인바운드 트래픽용
 - 악성트래픽으로부터 웹 어플리케이션 보호
 - HTTP/HTTPS 트래픽 검사, "SQL 인젝션", 크로스 사이트 스크립팅(XSS)등 공격 방어
+- botnet과 같은 분산 IP 공격도 대응가능
 
 ### Amazon GuardDuty
 - AWS 계정과 리소스에서 발생하는 로그를 분석해 보안 "위협을 자동으로 탐지", 보안경고 생성
@@ -203,6 +215,7 @@
 - Dashboard Share으로 AWS계정없는 사람도 접근가능
 - 모니터링 및 로그기록
 - OpenSearch로 직접 연결은 제공X
+- CloudWatch Logs: DB Audit Log 등 수집, 로그보관
 
 ### Cloud Watch EventBridge
 - 스케줄링 가능
@@ -261,7 +274,7 @@
 ### AWS S3
 데이터 저장용 서비스
 - 다중AZ 자동 복제
-- S3 Transfer Acceleration: From GLOBAL sites as quickly as possible in a SINGLE S3 bucket. Minimize operational complexity
+- S3 Transfer Acceleration: From GLOBAL sites as quickly as possible in a SINGLE S3 bucket. Minimize operational complexity, 업로드/다운로드 속도 개선
 - VPC외부에 있는 글로벌 퍼블릭 서비스
 - EC2에서 S3에 접근 시 보통 인터넷 없이 접근. S3는 Gateway Endpoint 많이 사용함
 	- 프라이빗 네트워크 연결
