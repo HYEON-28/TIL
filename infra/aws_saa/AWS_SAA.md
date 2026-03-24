@@ -13,11 +13,14 @@
 - 인터넷 게이트웨이/NAT Gateway 사용안하며 무료
 - S3 + 같은 Region + 비용 절감 -> 무조건 VPC Endpoint
 - DynamoDB도 동일함
+- Gateway Endpoint: S3, DynamoDB 지원. 무료
+- Interface Endpoint: 대부분의 AWS 지원. 유료
 
 ## Region
 - 물리적으로 떨어진 "지리적 영역"
 - 큰 단위(국가/대륙)
 - 사용목적: DR(재해복구), 글로벌 서비스
+- 단순 HA: 데이터 동기화/Letency/Route53구성 필요하므로 과도함
 
 ## Availability Zone(AZ)
 - Region 내부의 "격리된 데이터센터 그룹"
@@ -124,6 +127,8 @@
 - 악성트래픽으로부터 웹 어플리케이션 보호
 - HTTP/HTTPS 트래픽 검사, "SQL 인젝션", 크로스 사이트 스크립팅(XSS)등 공격 방어
 - botnet과 같은 분산 IP 공격도 대응가능
+- CloudFront, API Gateway, ALB에 붙일 수 있음 / NLB에 못붙임
+- 특정국가에서만 접근 허용(GeoMatch)
 
 ### Amazon GuardDuty
 - AWS 계정과 리소스에서 발생하는 로그를 분석해 보안 "위협을 자동으로 탐지", 보안경고 생성
@@ -144,6 +149,9 @@
 
 - Network ACL (NACL)
 	- 서브넷 단위, IP/Port
+
+## CloudFront
+- Filed-Level Encryption: 데이터 자체 암호화 기능(SSN, 신용카드 번호 등)
 
 ## Route53
 - AWS의 DNS 서비스
@@ -209,7 +217,9 @@
 
 -팬아웃 구조: 하나의 이벤트(메시지)를 여러 소비자에게 동시에 전달하는 구조
 
--Amazon RDS: 장기간 사용할 데이터베이스 인스턴스 예약 기능: RDS Reserved Service
+## Amazon RDS
+- 장기간 사용할 데이터베이스 인스턴스 예약 기능: RDS Reserved Service
+- Multi-AZ 동기 복제: 최대 2개 AZ
 
 ### AWS Cloud Watch
 - Dashboard Share으로 AWS계정없는 사람도 접근가능
@@ -238,6 +248,7 @@
 ### Amazon Elastic Container Service(Amazon ECS)
 - Docker 컨테이너를 "배포 + 스케일링 + 운영"까지 자동으로 관리해주는 서비스
 - 쿠버네티스와 같은 역할. 하지만 AWS에 특화된 더 단순한 대안
+- S3에 접근하려면 Task Role(taskRoleArn) 사용
 
 ### AWS Fargate
 - 컨테이너 실행만 하면 됨
@@ -270,6 +281,7 @@
 - Active Directory 통합
 - FSx for Lustre
 	- Lustre 네이티브 파일 시스템 제공
+	- HPC 전용 고성능 병렬 파일 시스템
 
 ### AWS S3
 데이터 저장용 서비스
@@ -351,10 +363,17 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 - ECS -> S3 : IAM Role
 - 사용자 로그인 : IAM User
 
+## SCP (Service Control Policy)
+- Scope: Origanization, OU, Account
+- IAM 권한 override 가능
+- 모든 계정에 적용, 단일 관리 포인트
+
 ### Lambda
 - 대규모 + 변동트래픽 -> Serverless가 최적
 - Execution Role: Lambda가 다른서비스 호출할 때
 - Resource-based Policy: 누가 Lambda를 호출할 수 있는지
+- 기본적으로 VPC 외부에 존재, ENI 설정으로 VPC 내부 리소스 접근가능
+	- 
 
 ### AWS Elastic Beanstalk
 - 코드만 올리면 AWS가 서버/배포/스케일링까지 자동으로 관리해주는 PaaS 서비스
@@ -379,6 +398,8 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 - Standard Queue: 순서 보장X
 - FIFO Queue: 순서 보장O
 - ChangeMessageVisibility: 메시지를 다른 소비자가 못보게 하는 시간 변경 (메시지 중복처리 방지)
+- 메시지 최대 14일 저장
+- Dead-Letter Queue(DLQ): 처리 실패 메시지 격리, 정상 메시지 처리 영향 없음
 
 ### Amazon MQ
 - Apache ActiveMQ: 기존 오픈소스 메시지 브로커 -> AmazonMQ와 호환
@@ -391,7 +412,7 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 - Multi-Region secret replication: 여러 리전에 복제 가능
 
 ## Amazon Aurora
-- AWS가 직접 만든 DB엔진
+- AWS가 직접 만든 DB엔진 (SQL)
 - Aurora Replicas: 읽기 확정
 - Auto Scaling: read Replica 자동 추가, 삭제
 - Multi-AZ: 고가용성
@@ -401,9 +422,14 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 스테이징/개발 DB를 생성.
 
 ## DynamoDB
+- 완전 서버리스 NoSQL DB
+- 즉시 자동 확장됨
 - point-in-time recovery
 - On-demand capacity mode: 읽기/쓰기 트래픽이 불규칙적일때. 사용한 만큼 요금부과
 - auto scaling: 반응 지연 가능
+- DynamoDB Accelerator(DAX): DynamoDB 전용 in-momory cache
+	- 마이크로초 단위 응답 속도
+	- read-heavy workload에서 사용
 
 ## Amazon RDS for MySQL Multi-AZ
 - 자동 장애복구 + 높은 가용성 + 운영 최소화
@@ -412,7 +438,7 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 
 ## RDS Proxy
 - DB 연결 pooling(애플리케이션 -> RDS Proxy -> DB)
-	- DB연결 수 급증 방지
+	- DB연결 수 급증 방지 (내부적으로 큐잉 사용함)
 - 최소 downtime
 - DB 업그레이드중에는 연결불가 -> 일부요청 손실 가능
 
@@ -469,6 +495,10 @@ Feed Update  Notification  Search Index  Analytics
            ▼
      Auto Scaling Group
        EC2 Workers
+
+## AWS Backup
+- EC2, RDS 등 통합 백업 관리
+- Cross-Region 백업 자동 지원
 
 ### 데이터 분석 서비스
 - Amazon Comprehend
@@ -547,3 +577,5 @@ Multipart Upload는 큰 파일을 여러 개의 작은 파트로 나누어 병�
 	- 디스크에 쓸 때 암호화, 읽을 때 복호화
 - active/standby brokers란?
 	- 메시지 브로커를 2개 두고, 하나는 운영, 하나는 대기하다가 장애 시 자동전환
+- ENI란?
+	- 네트워크에 참여하기 위한 "신분 + 설정 세트(IP, MAC, Subnet, 보안)"를 부여하는 객체
