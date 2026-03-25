@@ -67,11 +67,6 @@
 - CloudWatch -> Firehose -> OpenSearch로 전송 지원, Near real-time
 
 
-## Amazon S3 DataLake
-- 30TB/day 같은 많은 데이터 저장가능
-
-
-
 ## API Gateway
 - 초당 요청 제한, 사용자별 quota 등 기능 있음 (직접 구현하기 힘듦)
 - AWS Shield(DDoS, 공격방어), AWS WAF등 사용가능
@@ -232,7 +227,6 @@
 - 이벤트 기반 아키텍처 지원
 - 이벤트 라우팅 허브(중앙 브로커)
 
-
 ## CloudTrail
 - API audit log
 - API 호출기록 (누가 무엇을 했는가)
@@ -317,6 +311,19 @@
 - Origin Access Control
 	- S3 + 확장가능구조
 
+## Amazon S3 DataLake
+- 30TB/day 같은 많은 데이터 저장가능
+
+## AWS Lake Formation
+- 테이블 단위 권한
+- fine-grained 권한
+
+
+## AWS Transfer Family
+- SFTP, FTPS, FTP 완전 관리형 서비스
+- 직접 S3와 연동
+- FTP서버: S3은 HTTP기반 API로 동작함. FTP/SFTP프로토콜은 지원하지 않기 때문에 중간에서 FTP서버가 전달필요함.
+
 ### S3 File Gateway
 - 온프레미스 파일 서버(SMB/NFS)를 Amazon S3와 연결하여 S3를 사실상 무제한 파일 스토리지처럼 사용하게 해주는 캐시 기반 게이트웨이
 - 로컬처럼 보이지만 실제 저장은 S3에 함
@@ -378,6 +385,8 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 ### AWS Elastic Beanstalk
 - 코드만 올리면 AWS가 서버/배포/스케일링까지 자동으로 관리해주는 PaaS 서비스
 - 내부적으로 여러 서비스를 자동으로 사용하도록 되어있음
+- Java, PHP 지원
+- URL swapping 지원: 서버재시작, 트래픽 끊김 없이 무중단 배포가능
 
 ### 데이터 업로드
 - 10TB 이하 인터넷 업로드
@@ -430,17 +439,31 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 - DynamoDB Accelerator(DAX): DynamoDB 전용 in-momory cache
 	- 마이크로초 단위 응답 속도
 	- read-heavy workload에서 사용
+- TTL(Time To Live): 만료시간 설정하여 특정일수만큼만 데이터 보관 가능
+
+## DocumentDB
+- MongoDB 호환됨
 
 ## Amazon RDS for MySQL Multi-AZ
 - 자동 장애복구 + 높은 가용성 + 운영 최소화
 - HA 구조
 - RDS Custom: OS 접근 가능
+- Read Replica: 읽기성능 향상용
 
 ## RDS Proxy
 - DB 연결 pooling(애플리케이션 -> RDS Proxy -> DB)
 	- DB연결 수 급증 방지 (내부적으로 큐잉 사용함)
 - 최소 downtime
 - DB 업그레이드중에는 연결불가 -> 일부요청 손실 가능
+
+## Amazon ElasticCache for Redis
+- 메모리 캐시
+- HA지원 (replication)
+- EC2 오토스케일링 환경에서 세션관리 가능함
+
+## Amazon ElasticCache for Memcached
+- HA 없음
+- 단순캐싱, 초고속, 가볍게
 
 ## AWS Config
 - AWS 리소스 설정 변경 추적
@@ -500,6 +523,14 @@ Feed Update  Notification  Search Index  Analytics
 - EC2, RDS 등 통합 백업 관리
 - Cross-Region 백업 자동 지원
 
+## Amazon Connect
+- 콜센터, 고객 응대용 서비스
+
+## Amazon Pinpoint
+- 고객 커뮤니케이션/마케팅 플랫폼
+- 고객에게 메시지를 보내고 반응을 분석하는것
+- 타겟팅, 캠페인 관리, 사용자 행동 분석, 이벤트 수집
+
 ### 데이터 분석 서비스
 - Amazon Comprehend
 	- 텍스트 분석 서비스
@@ -511,6 +542,9 @@ Feed Update  Notification  Search Index  Analytics
 	- 커스텀 ML
 - Amazon Textract
 	- PDF/JPEG에서 텍스트 추출
+- Amazon Transcribe
+	- 음성 -> 텍스트 변환
+	- 여러 화자 인식(speacker recognition)
 
 ### 그 외 지식
 - multipart upload란?
@@ -579,3 +613,5 @@ Multipart Upload는 큰 파일을 여러 개의 작은 파트로 나누어 병�
 	- 메시지 브로커를 2개 두고, 하나는 운영, 하나는 대기하다가 장애 시 자동전환
 - ENI란?
 	- 네트워크에 참여하기 위한 "신분 + 설정 세트(IP, MAC, Subnet, 보안)"를 부여하는 객체
+- Fine-grained 권한 관리란?
+	- 데이터를 매우 세밀한 단위(테이블, 칼럼, 행 수준 등)으로 나눠서 접근 권한을 제어하는 것
