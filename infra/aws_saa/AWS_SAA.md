@@ -29,20 +29,24 @@
 
 ## Security Group
 - 기본적으로 Outbound All Allow
+- 인스턴스 대상, 자동 허용
+
+## NACL (network ACL)
+- 서브넷 대상, 직접 허용 필요
+- 응답포트 따로 허용해야 함
+
 
 ## Amazon AMI(Amazon Machine Image)
 - AWS에서 EC2인스턴스를 생성할 때 사용하는 템플릿 이미지
 - 서버의 운영체제(OS), 애플리케이션, 설정, 데이터 디스크(EBS)등을 포함한 완전한 스냅샷
 
-## Amazon Kinesis Data Streams
-- 실시간으로 발생하는 대량의 이벤트 데이터를 수집하고 여러 consumer가 동시에 처리할 수 있게 하는 서비스
-- 순서보장
 
 ## AWS Glue
 - 데이터 변환작업
 - 완전관리형 ETL(Extract, Transform, Load) 서비스
 - 데이터 전송 이후 가공/변환 처리 담당
 - Job Bookmark
+- 스키마 자동인식
 
 ## Kinesis vs Glue vs Athena
 - Kinesis: 실시간 처리
@@ -53,19 +57,20 @@
 
 ## Amazon Redshift
 - 대규모 클릭스트림 데이터 고속분석(OLAP) 가능 대규모 데이터에 대해 복잡한 SQL분석을 빠르게 수행함
+- 대규모 데이터 분석
 
-## 
-- Amazon Kinesis Data Streams: 실시간 스트리밍 데이터 수집 최적
-- 쿼리 문자열 기반 라우팅
-	- 쿼리 문자열(query string): url에서 ?뒤에 붙는 파라미터
-	- 쿼리문자열 값에 따라 로드밸런서가 서로 다른 백엔드로 트래픽을 보냄
-	- Application Load Balancer만 가능함
-
+## Amazon Kinesis Data Streams
+- 실시간으로 발생하는 대량의 이벤트 데이터를 수집하고 여러 consumer가 동시에 처리할 수 있게 하는 서비스
+- 실시간 스트리밍 데이터 수집 최적
+- 소비자가 직접 구현 필요
 
 ## Amazon Kinesis Data Firehose
 - 운영부담없이 데이터를 자동으로 S3/Redshift/OpenSearch로 전달
 - CloudWatch -> Firehose -> OpenSearch로 전송 지원, Near real-time
 
+## EMR Cluster
+- 대용량 데이터를 분산 처리하기 위한 관리형 빅데이터 플랫폼
+- Hadoop, Spark 같은 프레임워크를 서버 관리 없이 쉽게 실행함
 
 ## API Gateway
 - 초당 요청 제한, 사용자별 quota 등 기능 있음 (직접 구현하기 힘듦)
@@ -151,7 +156,10 @@
 ## Route53
 - AWS의 DNS 서비스
 - 도메인이름을 실제 서버(IP/리소스)로 연결하고 트래픽을 지능적으로 라우팅 하는 서비스
-
+- 옵션
+	- Failover: Active-Standby
+	- Weighted: 비율기반분배
+	- Multivalue: 랜덤 + Health Check
 
 ## AWS Certificate Manager(ACM)
 - 웹 서비스에 HTTPS 보안 통신을 적용하기 위한 인증서를 발급/관리해주는 서비스
@@ -394,6 +402,10 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 - 10TB ~ 100TB : Snowball
 - 100TB 이상: SnowMobile
 
+## AWS DataSync
+- 온프레미스 스토리지와 AWS 클라우드 간, 혹은 AWS 서비스 간 데이터 전송을 안전하고 빠르게 자동화 하는 서비스
+- 네트워크 사용함
+
 ### Amazon Simple Notification Service(SNS)
 - 메시지를 여러 구독자에게 동시에 전달하는 AWS의 Pub/Sub(발행-구독) 메시징 서비스입니다.
 - 하나의 이벤트 → 여러 시스템에 동시에 전달(Fan-out) 하는 구조를 쉽게 구현
@@ -472,7 +484,9 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 - rule: required-tags 같은것 추가가능
 
 
-
+## Disaster Recovery
+- Active-Passive: 하나의 시스템(Active)이 실제 트래픽을 처리하고, 다른 시스템(Passive)은
+	대기하다 장애 발생 시 대신 서비스
 
 ## Trusted Advisor
 - Best practice recommendation
@@ -480,10 +494,6 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 ## AWS Direct Connect
 - 온프레미스 <-> AWS 전용선 연결
 - 인터넷을 완전히 우회. 인터넷 트래픽과 완전 분리
-
-## AWS DataSync
-- 온프레미스 스토리지와 AWS 클라우드 간, 혹은 AWS 서비스 간 데이터 전송을 안전하고 빠르게 자동화 하는 서비스
-- 네트워크 사용함
 
 ### Fan-out Architecture
 - 하나의 이벤트(또는 메시지)를 여러 소비자(서비스)에게 동시에 전달하는 아키텍처 패턴
@@ -615,3 +625,9 @@ Multipart Upload는 큰 파일을 여러 개의 작은 파트로 나누어 병�
 	- 네트워크에 참여하기 위한 "신분 + 설정 세트(IP, MAC, Subnet, 보안)"를 부여하는 객체
 - Fine-grained 권한 관리란?
 	- 데이터를 매우 세밀한 단위(테이블, 칼럼, 행 수준 등)으로 나눠서 접근 권한을 제어하는 것
+- Apache Parquet이란?
+	- 데이터를 열(column) 단위로 저장하는 압축 친화적 포맷
+- 쿼리 문자열 기반 라우팅
+	- 쿼리 문자열(query string): url에서 ?뒤에 붙는 파라미터
+	- 쿼리문자열 값에 따라 로드밸런서가 서로 다른 백엔드로 트래픽을 보냄
+	- Application Load Balancer만 가능함
