@@ -1,5 +1,6 @@
 # AWS 실무
 
+## Git + ECR,ECS,Fargate 자동배포 환경
 git에서 main branch로 머지(코드변경)
 -> CI/CD (빌드&배포)
 -> Docker Image생성
