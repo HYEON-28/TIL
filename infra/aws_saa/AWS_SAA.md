@@ -87,14 +87,14 @@
 - health check
 - public subnet 위치
 
-### Network Load Balancer (L4: Transport)
+## Network Load Balancer (L4: Transport)
 - IP, Port만 확인함
 - TCP, UDP, 고정IP, 초고성능 -> NLB
 
-### Gateway Load Balancer (L3~L4)
+## Gateway Load Balancer (L3~L4)
 - 방화벽/보안 장비 트래픽 검사
 
-### AWS Global Accelerator
+## AWS Global Accelerator
 - 글로벌 latency routing을 제공
 - Region 장애 시 자동 Failover
 - AWS 글로벌 네트워크 통해 최적 리전으로 전달
@@ -109,20 +109,20 @@
 	
 - Outbound 접근을 URL기반으로 필터링
 
-### Gateway Load Balancer
+## Gateway Load Balancer
 - AWS에서 방화벽/보안 장비 트래픽 검사를 구현할 때 사용
 
-### AWS Network Firewall
+## AWS Network Firewall
 - L3~L7 트래픽 검사
 - 아웃바운드 트래픽 제어 기능
 - 도메인 기반 허용/차단
 - VPC내부의 트래픽을 검사(Inspection)하고 필터링(filtering)
 
-### AWS Firewall Manager
+## AWS Firewall Manager
 - 방화벽 정책 관리자
 - AWS Network Firewall은 실제 방화벽
 
-### AWS WAF(Web Applicaiton Firewall)
+## AWS WAF(Web Applicaiton Firewall)
 - 인바운드 트래픽용
 - 악성트래픽으로부터 웹 어플리케이션 보호
 - HTTP/HTTPS 트래픽 검사, "SQL 인젝션", 크로스 사이트 스크립팅(XSS)등 공격 방어
@@ -130,7 +130,7 @@
 - CloudFront, API Gateway, ALB에 붙일 수 있음 / NLB에 못붙임
 - 특정국가에서만 접근 허용(GeoMatch)
 
-### Amazon GuardDuty
+## Amazon GuardDuty
 - AWS 계정과 리소스에서 발생하는 로그를 분석해 보안 "위협을 자동으로 탐지", 보안경고 생성
 - Threat detection
 - DDos용은 아님
@@ -195,18 +195,18 @@
 	-아주 상세한 원시 데이터 분석 -> CUR + Athena / QuickSight
 	- raw billing data -> Cost and Usage Report
 
-### Cost Explorer
+## Cost Explorer
 - 비용 그래프 분석
 - 서비스 / instance type / tag별 분석
 
-### Amazon QuickSight
+## Amazon QuickSight
 - 여러 데이터 소스의 데이터를 연결하여 대시보드와 데이터 시각화를 생성하고 조직 내 사용자에게 공유할 수 있는 분석 플랫폼
 - IAM role 기반 공유X
 - QuickSight user/group 기반 공유
 - 연결가능 데이터소스: S3, RDS, Redshift, Athena, PostgreSQL, MySQL, EXCEL, CSV...
 
 
-### 예약 인스턴스(Reserved Instance)
+## 예약 인스턴스(Reserved Instance)
 - 비용할인 목적
 - 1,3년단위 예약가능
 
@@ -214,7 +214,7 @@
 - 하드웨어를 다른 고객과 공유하지 않는 EC2 인스턴스
 - 매우비쌈
 
-### 온디맨드 용량 예약(On-demand Capacity Reservation)
+## 온디맨드 용량 예약(On-demand Capacity Reservation)
 - 용량확보 목적
 - 1주일 등 짧은기간 예약가능
 
@@ -224,13 +224,13 @@
 - 장기간 사용할 데이터베이스 인스턴스 예약 기능: RDS Reserved Service
 - Multi-AZ 동기 복제: 최대 2개 AZ
 
-### AWS Cloud Watch
+## AWS Cloud Watch
 - Dashboard Share으로 AWS계정없는 사람도 접근가능
 - 모니터링 및 로그기록
 - OpenSearch로 직접 연결은 제공X
 - CloudWatch Logs: DB Audit Log 등 수집, 로그보관
 
-### Cloud Watch EventBridge
+## Cloud Watch EventBridge
 - 스케줄링 가능
 - 이벤트 기반 아키텍처 지원
 - 이벤트 라우팅 허브(중앙 브로커)
@@ -247,17 +247,17 @@
 	- Spot Block: Spot+일정 시간 보장
 - Target Tracking Scaling Policy: 특정 지표(CPU 40% 같은 용도)
 
-### Amazon Elastic Container Service(Amazon ECS)
+## Amazon Elastic Container Service(Amazon ECS)
 - Docker 컨테이너를 "배포 + 스케일링 + 운영"까지 자동으로 관리해주는 서비스
 - 쿠버네티스와 같은 역할. 하지만 AWS에 특화된 더 단순한 대안
 - S3에 접근하려면 Task Role(taskRoleArn) 사용
 
-### AWS Fargate
+## AWS Fargate
 - 컨테이너 실행만 하면 됨
 - 서버(EC2) 관리 완전히 제거
 - ECS + Fargate 조합으로 서버 프로비저닝, 오토스케일링 자동, 고가용성 자동 지원
 
-### Amazon Elastic Block Store (Amazon EBS) 
+## Amazon Elastic Block Store (Amazon EBS) 
 - EBS = EC2 전용(EC2에서만 쓰는) 가상 하드디스크
 - 단일 AZ
 - 스냅샷 기능 -> S3에 저장가능
@@ -269,7 +269,7 @@
 - EBS fast snapshot restore
 - EC2 Instance Store가 I/O Performance는 더 좋음
 
-### Amazon Elastic File System (Amazon EFS)
+## Amazon Elastic File System (Amazon EFS)
 - 여러 EC2 가 동시에 mount 가능
 - 내구성 매우 높음
 - 공유 파일 시스템
@@ -285,7 +285,7 @@
 	- Lustre 네이티브 파일 시스템 제공
 	- HPC 전용 고성능 병렬 파일 시스템
 
-### AWS S3
+## AWS S3
 데이터 저장용 서비스
 - 다중AZ 자동 복제
 - S3 Transfer Acceleration: From GLOBAL sites as quickly as possible in a SINGLE S3 bucket. Minimize operational complexity, 업로드/다운로드 속도 개선
@@ -332,28 +332,28 @@
 - 직접 S3와 연동
 - FTP서버: S3은 HTTP기반 API로 동작함. FTP/SFTP프로토콜은 지원하지 않기 때문에 중간에서 FTP서버가 전달필요함.
 
-### S3 File Gateway
+## S3 File Gateway
 - 온프레미스 파일 서버(SMB/NFS)를 Amazon S3와 연결하여 S3를 사실상 무제한 파일 스토리지처럼 사용하게 해주는 캐시 기반 게이트웨이
 - 로컬처럼 보이지만 실제 저장은 S3에 함
 - 자주쓰는 파일 -> 로컬 캐시
 
-### NAT Gateway
+## NAT Gateway
 - 하나의 AZ를 지정하여 설치함
 - 프라이빗 서브넷의 리소스가 인터넷으로 나갈 수 있게 해주되, 외부에서는 직접 접근하지 못하게 만드는 서비스
 - OS 업데이트, 외부 API 호출, 패키지 설치 등을 위함
 - S3에만 접근이 필요할땐 VPC Endpoint 사용이 정답임
 - Public Subnet에 배치해야하며 Private Subnet에서 NAT Gateway로 트래픽 라우팅
 
-### Gateway VPC Endpoint
+## Gateway VPC Endpoint
 - 
 
-### AWS KMS(Key Management Ssytem)
+## AWS KMS(Key Management Ssytem)
 - Multi-Region customer managed key 기능 있음
 - 여러 region에 replica key 생성
 - 키 사용 로그 기록
 
 
-### Cloud Front
+## Cloud Front
 - 정적파일 글로벌 배포: S3 + Cloud Front
 - 정적 콘텐츠: S3캐싱
 - 동적 콘텐츠: ALB/EC2 전달
@@ -364,11 +364,11 @@
 - 글로벌 네트워크 최적화로 가장 가까운 Edge Location 연결 후 AWS전용 백본망으로 Origin까지 전달함
 	-> 일반 인터넷보다 훨씬 빠르고 안정적
 
-### Amazon Athena
+## Amazon Athena
 - S3데이터 직접 query 가능
 Amazon Athena is an interactive query service that makes it easy to analyze data directly in Amazon Simple Storage Service (Amazon S3) using standard SQL.
 
-### IAM
+## IAM
 - PrincipalOrgID: Organization을 위한 접근 정책
 - EC2가 AWS 서비스에 접근할 때는 IAM Role 사용이 정석
 	- AWS 서비스가 다른 AWS 서비스에 접근 → IAM Role
@@ -383,20 +383,20 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 - IAM 권한 override 가능
 - 모든 계정에 적용, 단일 관리 포인트
 
-### Lambda
+## Lambda
 - 대규모 + 변동트래픽 -> Serverless가 최적
 - Execution Role: Lambda가 다른서비스 호출할 때
 - Resource-based Policy: 누가 Lambda를 호출할 수 있는지
 - 기본적으로 VPC 외부에 존재, ENI 설정으로 VPC 내부 리소스 접근가능
 	- 
 
-### AWS Elastic Beanstalk
+## AWS Elastic Beanstalk
 - 코드만 올리면 AWS가 서버/배포/스케일링까지 자동으로 관리해주는 PaaS 서비스
 - 내부적으로 여러 서비스를 자동으로 사용하도록 되어있음
 - Java, PHP 지원
 - URL swapping 지원: 서버재시작, 트래픽 끊김 없이 무중단 배포가능
 
-### 데이터 업로드
+## 데이터 업로드
 - 10TB 이하 인터넷 업로드
 - ~8TB : Snowcone
 - 10TB ~ 100TB : Snowball
@@ -406,14 +406,14 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 - 온프레미스 스토리지와 AWS 클라우드 간, 혹은 AWS 서비스 간 데이터 전송을 안전하고 빠르게 자동화 하는 서비스
 - 네트워크 사용함
 
-### Amazon Simple Notification Service(SNS)
+## Amazon Simple Notification Service(SNS)
 - 메시지를 여러 구독자에게 동시에 전달하는 AWS의 Pub/Sub(발행-구독) 메시징 서비스입니다.
 - 하나의 이벤트 → 여러 시스템에 동시에 전달(Fan-out) 하는 구조를 쉽게 구현
 - Amazon SNS → AWS Lambda 문제
 	- 네트워크 이슈 시 이벤트 유실
 	- Lambda 실패 -> 자동 재처리 없음
 
-### Amazon Simple Queue Service (SQS)
+## Amazon Simple Queue Service (SQS)
 - 플리케이션 간 메시지를 큐(Queue)에 저장하여 비동기적으로 처리하도록 하는 AWS의 완전관리형 메시지 큐 서비스
 - 사용 이유: 서비스 분리(Decoupling), 서비스끼리 직접 호출하지 않음
 - Standard Queue: 순서 보장X
@@ -422,10 +422,10 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 - 메시지 최대 14일 저장
 - Dead-Letter Queue(DLQ): 처리 실패 메시지 격리, 정상 메시지 처리 영향 없음
 
-### Amazon MQ
+## Amazon MQ
 - Apache ActiveMQ: 기존 오픈소스 메시지 브로커 -> AmazonMQ와 호환
 - 
-### AWS Secrets Manager
+## AWS Secrets Manager
 - automatic rotation
 - DB 자격증명(username/password)을 안전하게 저장하고 자동으로 교체
 - Automatic Rotation: 실제로 데이터베이스 비밀번호를 자동으로 변경하고, 새 비밀번호를 Secrets Manager에 업데이트까지 해줌
@@ -495,7 +495,7 @@ Amazon Athena is an interactive query service that makes it easy to analyze data
 - 온프레미스 <-> AWS 전용선 연결
 - 인터넷을 완전히 우회. 인터넷 트래픽과 완전 분리
 
-### Fan-out Architecture
+## Fan-out Architecture
 - 하나의 이벤트(또는 메시지)를 여러 소비자(서비스)에게 동시에 전달하는 아키텍처 패턴
 - 1개의 입력 → N개의 처리 시스템으로 확장 전달하는 구조
 - 대표적인 구성: SNS -> SQS Fan-out
@@ -519,7 +519,7 @@ Event Bus
  ▼ ▼          ▼           ▼
 Feed Update  Notification  Search Index  Analytics
 
-### Queue-based load leveling
+## Queue-based load leveling
           Jobs
            │
            ▼
@@ -541,7 +541,7 @@ Feed Update  Notification  Search Index  Analytics
 - 고객에게 메시지를 보내고 반응을 분석하는것
 - 타겟팅, 캠페인 관리, 사용자 행동 분석, 이벤트 수집
 
-### 데이터 분석 서비스
+## 데이터 분석 서비스
 - Amazon Comprehend
 	- 텍스트 분석 서비스
 	- comprehend medical: 의료민감정보 식별
@@ -556,7 +556,7 @@ Feed Update  Notification  Search Index  Analytics
 	- 음성 -> 텍스트 변환
 	- 여러 화자 인식(speacker recognition)
 
-### 그 외 지식
+## 그 외 지식
 - multipart upload란?
 Multipart Upload는 큰 파일을 여러 개의 작은 파트로 나누어 병렬로 업로드한 후 Amazon S3에서 하나의 객체로 합치는 업로드 방식이다. 대용량 데이터를 빠르고 안정적으로 업로드하기 위해 사용.
 - NFS(Network File System)란?
