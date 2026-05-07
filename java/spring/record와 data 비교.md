@@ -1,4 +1,4 @@
-# record vs @Data(Lombok)
+# record와 @Data(Lombok) 비교
 DTO용도로 객체를 만들 때 위 두가지 방식이 있다. 
 기존 회사코드에서는 @Data(Lombok)을 사용하였기 때문에 새로운 방식인 record와 비교하여 어떤점이 다른지 알아보았다.
 
@@ -10,5 +10,13 @@ DTO용도로 객체를 만들 때 위 두가지 방식이 있다.
 
 
 ## @Data
-- 외부 라이브러리가 필요하다
-- 기본은 가변적인 특성을 가진다
+- 외부 라이브러리(Lombok)가 필요하다
+- getter, setter, equals, hashCode, toString을 자동 생성해준다
+- 기본은 가변적인 특성을 가진다 (setter가 있으므로)
+- `@Builder`와 함께 쓰는 경우가 많다
+- 회사 코드처럼 레거시 프로젝트에서 많이 볼 수 있음
+
+## 언제 뭘 쓸까?
+
+데이터 변경이 없는 DTO라면 record가 더 명확하다.  
+반면 필드가 많거나 Builder 패턴이 필요한 경우엔 @Data + @Builder 조합이 여전히 편하다.
