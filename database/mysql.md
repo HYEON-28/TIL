@@ -1,3 +1,4 @@
+```
 CREATE TABLE users (
 id BINARY(16) NOT NULL DEFAULT (UUID_TO_BIN(UUID(), 1)),
 github_id BIGINT UNSIGNED NOT NULL,
@@ -17,6 +18,7 @@ PRIMARY KEY (id),
 
 UNIQUE KEY uq_github_id (github_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
 
 ### ENGINE=InnoDB
 
