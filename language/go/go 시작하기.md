@@ -9,7 +9,7 @@
 /usr/local/go/src경로에 github.com, golang.org등의 폴더가 있음.
 Node.js는 (npmjs.com), Python은 (pypi.org) 의 단일 소스에서 받지만 Go는 여러 소스에서 받을 수 있다.
 
-## 기초문법
+## \*\*\*\*기초문법
 
 ### 변수와 상수
 
@@ -24,3 +24,5 @@ func main() {
 ```
 
 ### 함수
+
+1.3 강의
