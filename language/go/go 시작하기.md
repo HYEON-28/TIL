@@ -6,8 +6,7 @@
 
 ### 의존성 관리
 
-/usr/local/go/src경로에 github.com, golang.org등의 폴더가 있음.
-Node.js는 (npmjs.com), Python은 (pypi.org) 의 단일 소스에서 받지만 Go는 여러 소스에서 받을 수 있다.
+- [ ]
 
 ## \*\*\*\*기초문법
 
@@ -26,3 +25,44 @@ func main() {
 ### 함수
 
 1.3 강의
+
+```
+func multiply(a, b int) int {
+	return a * b
+}
+
+func multiply(a int, b int) int {
+	return a * b
+}
+func main() {
+	fmt.Println(multiply(2, 2))
+}
+```
+
+함수가 복수의 리턴값을 가질 수 있음
+
+```
+	func lenAndUpper(name string) (int, string) {
+		return len(name), strings.ToUpper(name)
+	}
+
+	func main() {
+		totalLength, upperName := lenAndUpper("nico")
+		// totalLength, _ := lenAndUpper("nico") 리턴값을 무시하려면 _를 쓴다
+		fmt.Println(totalLength, upperName)
+	}
+```
+
+복수 arguments
+
+```
+func repeatMe(words ...string) { // words가 배열이 됨
+	fmt.Println(words)
+}
+
+func main() {
+	repeatMe("nico", "lynn", "dal", "marl", "flynn")
+}
+```
+
+1.4 강의
