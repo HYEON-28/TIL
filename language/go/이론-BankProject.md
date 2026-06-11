@@ -16,4 +16,4 @@ type Account struct {
 
 ---
 
-2.0 4:45 부터 보기
+2.2부터 보기 : balance가 변하지 않은 이유 -> \*account라고 안써서..??
