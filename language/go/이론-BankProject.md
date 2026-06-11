@@ -16,4 +16,24 @@ type Account struct {
 
 ---
 
-2.2부터 보기 : balance가 변하지 않은 이유 -> \*account라고 안써서..??
+## Go에서 에러처리 하는법
+
+- Go는 에러처리용 구문에 없음: try-catch, try-except 같은것
+
+- `error`를 리턴하면 된다.
+
+```
+// error가 있는 경우
+return errors.New("message")
+// error가 없는 경우
+return nil -> 역시 error타입임
+```
+
+- go는 에러를 매번 수동으로 체크해야 함
+
+```
+err := account.Withdraw(20)
+if err != nil {
+	log.Fatalln(err)
+}
+```
