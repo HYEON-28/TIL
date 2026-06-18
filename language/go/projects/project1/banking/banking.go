@@ -1,6 +1,9 @@
 package accounts
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 // Account struct
 type Account struct {
@@ -38,4 +41,21 @@ func (a *Account) Withdraw(amount int) error {
 	} 
 	a.balance -= amount
 	return nil
+}
+
+// ChangeOwner of the account
+func (a *Account) ChangeOwner(newOwner string) {
+	a.owner = newOwner
+}
+
+// Owner of account
+// "이 함수는 Account를 변경하지 않는다"라는 의도를 코드에 표현함
+func (a Account) Owner() string {
+	return a.owner
+}
+
+// fmt.Println(account) 를 호출했을 때 자동으로 호출되는 메소드
+// 기본: &{nico 10}
+func (a Account) String() string {
+	return fmt.Sprint(a.Owner(), "'s account.\nHas: ", a.Balance())
 }
