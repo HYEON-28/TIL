@@ -59,3 +59,4 @@ func (a Account) Owner() string {
 func (a Account) String() string {
 	return fmt.Sprint(a.Owner(), "'s account.\nHas: ", a.Balance())
 }
+
